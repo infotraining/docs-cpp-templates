@@ -1,4 +1,9 @@
 format: jb-book
 root: index
 chapters:
-- file: tdd
+- file: templates
+  sections:
+  - file: function-templates
+  - file: class-templates
+  - file: aliases
+  - file: variable-templates
