@@ -7,3 +7,10 @@ chapters:
   - file: class-templates
   - file: aliases
   - file: variable-templates
+- file: traits-policies
+- file: type-traits
+- file: sfinae  
+- file: variadic-templates
+- file: fold-expressions
+- file: tuples   
+- file: index-sequences
