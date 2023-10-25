@@ -9,7 +9,9 @@ chapters:
   - file: variable-templates
 - file: traits-policies
 - file: type-traits
+- file: generic-functions 
 - file: sfinae  
+- file: concepts
 - file: variadic-templates
 - file: fold-expressions
 - file: tuples   
