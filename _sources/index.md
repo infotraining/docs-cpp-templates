@@ -1,3 +1,3 @@
-# Szkolenie
+# Programowanie generyczne w C++
 
-Materiały do szkolenia [Test-Driven Development w C++](https://www.infotraining.pl/szkolenie/c-plus-plus/tdd)
+Materiały do szkolenia [Programowanie generyczne w C++ - szablony](https://www.infotraining.pl/szkolenie/c-plus-plus/szablony)
