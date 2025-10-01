@@ -131,3 +131,6 @@ dmypy.json
 # jbook build
 _build*/
 .vscode/settings.json
+
+# other
+.idea/
