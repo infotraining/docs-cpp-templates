@@ -1,12 +1,27 @@
 # Szablony klas
 
-Podobnie do funkcji, klasy oraz struktury też mogą być być szablonami sparametryzowanymi typami.
+**Szablony klas** (*class templates*) to mechanizm pozwalający na tworzenie klas, które są parametryzowane. Podobnie jak szablony funkcji, szablony klas są fundamentalnym elementem programowania generycznego w C++.
 
-Szablony klas mogą być wykorzystane do implementacji kontenerów, które mogą przechowywać dane typów, które będą definiowane później.
+Szablony klas charakteryzują się następującymi właściwościami:
 
-W terminologii obiektowej szablony klas nazywane są *klasami parametryzowanymi*.
+* **Parametryzacja typu** - klasa może działać z różnymi typami danych określonymi w momencie utworzenia obiektu
+* **Generowanie kodu na żądanie** - kompilator tworzy kod tylko dla tych funkcji składowych, które rzeczywiście są wywoływane (*lazy instantiation*)
+* **Bezpieczeństwo typów** - sprawdzanie typów odbywa się w czasie kompilacji
+* **Brak narzutu wydajnościowego** - kod jest generowany w czasie kompilacji, więc nie ma narzutu w czasie działania programu
 
-W przypadku użycia szablonów klas generowany jest kod tylko dla tych funkcji składowych, które rzeczywiście są wywoływane.
+Szablony klas są szeroko wykorzystywane do:
+
+* **Implementacji kontenerów** - `std::vector`, `std::list`, `std::map` itp.
+* **Tworzenia smart pointerów** - `std::unique_ptr`, `std::shared_ptr`
+* **Wrapper'ów i adapterów** - `std::optional`, `std::variant`, `std::any`
+* **Metaprogramowania** - obliczenia w czasie kompilacji
+* **Policy-based design** - elastyczne konfigurowanie zachowania klas
+
+## Podstawowa składnia
+
+### Definicja szablonu klasy
+
+Szablon klasy definiujemy poprzedzając definicję klasy deklaracją `template` z listą parametrów:
 
 ```cpp
 template <typename T>
@@ -17,10 +32,13 @@ class Vector
     
 public: 
     explicit Vector(size_t size);
-    ~Vector() { delete [] items_; }
+    ~Vector() noexcept { delete [] items_; }
     
-    //...
+    // Operacje kopiowania
+    Vector(const Vector& other);
+    Vector& operator=(const Vector& other);
     
+    // Dostęp do elementów
     const T& operator[](size_t index) const
     {
          return items_[index];
@@ -34,38 +52,73 @@ public:
     const T& at(size_t index) const;
     T& at(size_t index);
     
-    size_t size() const
+    size_t size() const noexcept
     {
         return size_;
     }
+
+    bool empty() const noexcept
+    {
+        return size_ == 0;
+    }
+
+    void swap(Vector& other) noexcept
+    {
+        std::swap(size_, other.size_);
+        std::swap(items_, other.items_);
+    }
+    
+    // Iteratory (uproszczone)
+    T* begin() noexcept { return items_; }
+    T* end() noexcept { return items_ + size_; }
+    const T* begin() const noexcept { return items_; }
+    const T* end() const noexcept { return items_ + size_; }
 };
 ```
 
-Aby utworzyć zmienne typów szablonowych musimy określić parametry szablonu klasy:
+### Implementacja funkcji składowych poza ciałem klasy
+
+Definiując funkcję składową szablonu klasy **poza ciałem klasy**, należy:
+
+1. Poprzedzić definicję deklaracją `template` z parametrami
+2. Użyć pełnej nazwy klasy z parametrami szablonu (`Vector<T>`)
+3. Zachować spójność parametrów szablonu
 
 ```cpp
-Vector<int> integral_numbers(100);
-Vector<double> real_numbers(200);
-Vector<std::string> words(665);
-Vector<Vector<int>> matrix(10);
-```
-
-## Implementacja funkcji składowych
-
-Definiując funkcję składową szablonu klasy należy określić jej przynależność do szablonu.
-
-```cpp
+// Konstruktor
 template <typename T>
 Vector<T>::Vector(size_t size) 
     : size_{size}, items_{new T[size]}
-{        
+{
+    std::fill_n(items_, size_, T{});
 }
 
+// Konstruktor kopiujący
+template <typename T>
+Vector<T>::Vector(const Vector& other)
+    : size_{other.size_}, items_{new T[size_]}
+{
+    for (size_t i = 0; i < size_; ++i)
+        items_[i] = other.items_[i];
+}
+
+// Operator przypisania
+template <typename T>
+Vector<T>& Vector<T>::operator=(const Vector& other)
+{
+    if (this != &other) {
+        Vector<T> temp(other); // copy-and-swap idiom
+        swap(temp);
+    }
+    return *this;
+}
+
+// Metoda at() z sprawdzaniem zakresu
 template <typename T>
 T& Vector<T>::at(size_t index)
 {        
     if (index >= size_)
-        throw std::out_of_range("Vector::operator[]");
+        throw std::out_of_range("Vector::at() - index out of range");
 
     return items_[index];
 }
@@ -74,102 +127,274 @@ template <typename T>
 const T& Vector<T>::at(size_t index) const
 {        
     if (index >= size_)
-        throw std::out_of_range("Vector::operator[]");
+        throw std::out_of_range("Vector::at() - index out of range");
 
     return items_[index];
 }
 ```
 
+### Tworzenie instancji szablonu klasy
+
+Aby utworzyć obiekt na podstawie szablonu klasy, musimy **jawnie określić parametry szablonu** w nawiasach ostrych `<>`:
+
+```cpp
+Vector<int> integral_numbers(10); // Vector przechowujący wartości typu int
+Vector<double> real_numbers(20);  // Vector przechowujący wartości typu double
+Vector<std::string> words(42);    // Vector przechowujący wartości typu string
+```
+
+```{note}
+W przeciwieństwie do szablonów funkcji, dla szablonów klas (przed C++17) **nie ma automatycznej dedukcji typów**. Musimy zawsze podać jawnie typ, który jest parametrem szablonu.
+
+Od C++17 nie jest to wymagane dla szablonów klas, które wspierają mechanizm CTAD - *Class Template Argument Deduction*.
+```
+
+### Przykład użycia
+
+```cpp
+// Tworzenie wektora liczb całkowitych
+Vector<int> numbers(5);
+for (size_t i = 0; i < numbers.size(); ++i)
+    numbers[i] = i * 10;
+
+// Iteracja używając range-based for (dzięki begin/end)
+for (auto num : numbers)
+    std::cout << num << " ";  // Wypisze: 0 10 20 30 40
+
+std::cout << "\n";
+
+// Tworzenie wektora stringów
+Vector<std::string> words(3);
+words[0] = "Hello";
+words[1] = "World";
+words[2] = "!";
+
+for (const auto& word : words)
+    std::cout << word << " ";  // Wypisze: Hello World !
+std::cout << "\n";
+```
+
 ## Parametry szablonów klas
+
+Szablony klas mogą mieć różne rodzaje parametrów, co daje dużą elastyczność w projektowaniu.
 
 Każdy parametr szablonu może być:
 
-1. Typem (wbudowanym lub zdefiniowanym przez użytkownika).
-2. Stałą znaną w chwili kompilacji (liczby całkowite, wskaźniki i referencje danych statycznych).
-3. Innym szablonem.
+1. **Parametrem typu** (`typename` lub `class`) - dowolny typ
+2. **Parametrem niebędącym typem** (*non-type parameter - NTTP*) - stała wartość znana w czasie kompilacji
+3. **Parametrem będącym szablonem** (*template template parameter*) - szablon jako parametr
 
-### Parametry szablonów niebędące typami
+### 1. Parametry typu
 
-Można używać parametrów nie będących typami, o ile są to wartości znane na etapie kompilacji.
+Najpowszechniejszy rodzaj parametrów:
 
 ```cpp
-template <class T, size_t N>
+template <typename T>
+class Box
+{
+    T value_;
+public:
+    explicit Box(T v) : value_(v) {}
+    const T& get() const { return value_; }
+};
+
+// Użycie
+Box<int> int_box(42);
+Box<std::string> str_box("Hello");
+```
+
+Możemy mieć wiele parametrów, które są typami:
+
+```cpp
+template <typename Key, typename Value>
+class KeyValuePair
+{
+    Key key_;
+    Value value_;
+public:
+    KeyValuePair(Key k, Value v) : key_(k), value_(v) {}
+    Key key() const { return key_; }
+    Value value() const { return value_; }
+};
+
+// Użycie
+KeyValuePair<std::string, int> pair("age", 25);
+```
+
+### 2. Parametry niebędące typami - NTTP
+
+Można używać **parametrów nie będących typami**, o ile są to wartości znane na etapie kompilacji:
+
+```cpp
+template <typename T, size_t N>
 struct Array 
 {
-    using value_type = T;        
+    using value_type = T;
+    using iterator = T*;
+    using const_iterator = const T*;
 
     T items_[N];
     
-    constexpr size_t size()
+    constexpr size_t size() const
     {
         return N;
     }
+    
+    T& operator[](size_t index)
+    {
+        return items_[index];
+    }
+    
+    const T& operator[](size_t index) const
+    {
+        return items_[index];
+    }
+
+    iterator begin() noexcept { return items_; }
+    iterator end() noexcept { return items_ + N; }
+    const_iterator begin() const noexcept { return items_; }
+    const_iterator end() const noexcept { return items_ + N; }
 }; 
 
-Array<int, 1024> buffer;
+// Użycie
+Array<int, 10> small_buffer;
+Array<double, 1024> large_buffer;
+Array<char, 256> char_buffer;
+
+// Rozmiar jest częścią typu!
+static_assert(sizeof(Array<int, 10>) != sizeof(Array<int, 20>));
+
+// Nie można przypisać tablic różnych rozmiarów
+// Array<int, 10> a;
+// Array<int, 20> b;
+// a = b;  // BŁĄD - różne typy!
 ```
 
-Parametrom szablonu klasy można przypisać argumenty domyślne (od C++11 jest to możliwe również dla szablonów funkcji).
+#### Dopuszczalne parametry NTTP
+
+* Typy całkowite (`int`, `long`, `size_t`, etc.)
+* Typy wyliczeniowe
+* Wskaźniki i referencje do obiektów/funkcji (C++11)
+* `std::nullptr_t` (C++11)
+* Wskaźniki do składowych (C++11)
+* Typy zmiennoprzecinkowe (C++20)
+* Typy strukturalne (C++20)
+* Lambdy (C++20)
+
+
+### 3. Szablony jako parametry szablonów
+
+**Template template parameters** - gdy jako parametr ma być użyty inny szablon, kompilator musi zostać o tym poinformowany. Należy przy tym określić liczbę i rodzaj parametrów szablonu przekazywanego jako argument:
 
 ```cpp
-template <class T, size_t N = 1024>
-struct Array 
+template <typename T, 
+          template<typename, typename> class Container, /* template template parameter */
+          typename TAllocator = std::allocator<T>>
+class Stack 
 {
+private:
+    Container<T, TAllocator> items_;
+    
 public:
-    using value_type = T;        
+    Stack() = default;
 
-    constexpr size_t size()
+    void push(const T& item)
     {
-        return N;
+        items_.push_back(item);
     }
 
-    T items_[N];
-}; 
+    void push(T&& item)
+    {
+        items_.push_back(std::move(item));
+    }
+    
+    void pop()
+    {
+        if (items_.empty())
+            throw std::underflow_error("Stack is empty");
+        
+        items_.pop_back();
+    }
+    
+    T& top()
+    {
+        if (items_.empty())
+            throw std::underflow_error("Stack is empty");
 
-template <typename T, typename Container = std::vector<T>>
-class Stack
-{
-public:
-    Stack();
-    void push(const T& elem);
-    void push(T&& elem);
-    void pop();
-    T& top() const;
+        return items_.back();
+    }
+    
+    const T& top() const
+    {
+        if (items_.empty())
+            throw std::underflow_error("Stack is empty");
+        
+        return items_.back();
+    }
+    
+    bool empty() const { return items_.empty(); }
+
+    size_t size() const { return items_.size(); }
+    
 private:
     Container items_;
 };
 
-// creating objects
-Stack<int> stack_one; // Stack<int, vector<int>>
-Stack<int, std::list<int>> stack_two;
+// Użycie - podajemy szablon kontenera, nie konkretny typ
+Stack<int, std::vector> vec_stack;
+Stack<int, std::deque> deque_stack;
+Stack<int, std::list> list_stack;
 ```
 
-### Szablony jako parametry szablonów
+### Parametry domyślne
 
-Jeżeli w kodzie jako parametr ma być użyty inny szablon, to kompilator powinien zostać o tym poinformowany.
+Parametrom szablonu klasy można przypisać **argumenty domyślne** (od C++11 możliwe również dla szablonów funkcji):
 
 ```cpp
-template <typename T, template<typename, size_t> class Container, size_t N = 1024>
-class Stack 
+// Domyślny rozmiar tablicy
+template <typename T, size_t N = 1024>
+struct Array 
 {
-private:
-    Container<T, N> elems_;
+    //...
+}; 
+
+// Użycie z domyślnym rozmiarem
+Array<int> default_buffer;      // Array<int, 1024>
+Array<int, 512> small_buffer;   // Array<int, 512>
+Array<double> double_buffer;    // Array<double, 1024>
+```
+
+Często jako parametr szablonu klasy podaje się kontener (np. `std::vector`, `std::list`, etc.) lub komparator (np. `std::less`, `std::greater`).
+
+```cpp
+template <typename T, typename Compare = std::less<T>, typename Container = std::vector<T>>
+class PriorityQueue
+{
+    Container items_;
+    [[no_unique_address]] Compare comp_;    
+    
 public:
-    Stack();
-    void push(const T& elem);
-    void push(T&& elem);
-    void pop();
-    T& top() const;
+    PriorityQueue() : items_(), comp_() {}
+
+    void insert(const T& item)
+    {
+        auto it = std::lower_bound(items_.begin(), items_.end(), item, comp_);
+        items_.insert(it, item);
+    }
+    
+    const T& front() const { return items_.front(); }
+
+    //...
 };
 
-template <typename T, template<typename, size_t> class Container, size_t N>
-Stack<T, Container, N>::Stack()
-{
-}
+// Użycie z domyślnym komparatorem
+PriorityQueue<int> numbers_ascending;  // std::less<int>
 
-// creating objects
-Stack<int, Array> stack_three;
-Stack<int, Array, 512> stack_four;
+// Użycie z własnym komparatorem
+PriorityQueue<int, std::greater<int>> numbers_descending;
+
+// Użycie z własnym komparatorem i kontenerem
+PriorityQueue<int, std::greater<int>, std::deque<int>> numbers_descending_deque;    
 ```
 
 ## Specjalizacja szablonów klas
@@ -274,137 +499,16 @@ public:
     void push(const T&);
     void pop();
     //...
-    // przypisanie stosu o elementach typu T2
-    template <typename T2>
-    Stack<T>& operator=(const Stack<T2>&);
+    // przypisanie stosu o elementach typu U
+    template <typename U>
+    Stack<T>& operator=(const Stack<U>&);
 }; 
 
 template <typename T>
-    template <typename T2>
-Stack<T>& Stack<T>::operator=(const Stack<T2>& source)
+    template <typename U>
+Stack<T>& Stack<T>::operator=(const Stack<U>& source)
 {
     //...
-}
-```
-
-## Nazwy zależne od typów
-
-Gramatyka języka C++ nie jest niezależna od kontekstu. Aby sparsować np. definicję funkcji, potrzebna jest znajomość kontekstu, w którym funkcja jest definiowana.
-
-Przykład problemu:
-
-```cpp
-template <typename T>
-auto dependent_name_context1(int x)
-{
-    auto value = T::A(x);
-    
-    return value;
-}
-```
-
-Standard C++ rozwiązuje problem przyjmując założenie, że dowolna nazwa, która jest zależna od parametru szablonu odnosi się do zmiennej, funkcji lub obiektu.
-
-```cpp
-struct S1
-{
-    static int A(int v) { return v * v; }
-};
-
-auto value2 = dependent_name_context1<S1>(10); // OK - T::A(x) was parsed as a function call
-```
-
-Słowo kluczowe `typename` umożliwia określenie, że dany symbol (identyfikator) występujący w kodzie szablonu i zależny od parametru szablonu jest typem, np. typem zagnieżdżonym – zdefiniowanym wewnątrz klasy.
-
-```cpp
-struct S2
-{
-    struct A
-    {
-        int x;
-        
-        A(int x) : x{x}
-        {}
-    };
-};
-
-template <typename T>
-auto dependent_name_context2(int x)
-{
-    auto value = typename T::A(x); // hint for a compiler that A is a type
-    
-    return value;
-}
-
-auto value = dependent_name_context2<S2>(10); // OK - T::A was parsed as a nested type
-```
-
-Przykład użycia słowa kluczowego `typename` dla zagnieżdżonych typów definiowanych w kontenerach:
-
-```cpp
-template <class T> 
-class Vector 
-{      
-public:
-    using value_type = T;
-    using iterator = T*;
-    using const_iterator = const T*;    
-
-    // ...
-    // rest of implementation
-};
-
-template <typename Container>
-typename Container::value_type sum(const Container& container)
-{
-    using result_type = typename Container::value_type;
-
-    result_type result{};
-
-    for(typename Container::const_iterator it = container.begin(); it != container.end(); ++it)
-        result += *it;
-
-    return result;
-}
-```
-
-Podobne problemy dotyczą również nazw zależnych od parametrów szablonu i odwołujących się do zagnieżdżonych definicji innych szablonów:
-
-```cpp
-struct S1 { static constexpr int A = 0; }; // S1::A is an object
-struct S2 { template<int N> static void A(int) {} }; // S2::A is a function template
-struct S3 { template<int N> struct A {}; }; // S3::A is a class template
-int x;
-
-template<class T>
-void foo() 
-{
-    T::A < 0 > (x); // if T::A is an object, this is a pair of comparisons;                    
-                    // if T::A is a typename, this is a syntax error;                        
-                    // if T::A is a function template, this is a function call;        
-                    // if T::A is a class or alias template, this is a declaration.
-}
-
-foo<S1>(); // OK
-```
-
-Aby określić, że dany symbol zależny od parametru szablonu to szablon funkcji piszemy:
-
-```cpp
-template <typename T>
-voi foo()
-{
-    T::template A<0>();
-}
-```
-
-Aby określić, że dany symbol zależny od parametru szablonu to szablon klasy piszemy:
-
-```cpp
-template <typename T>
-voi foo()
-{
-    typename T::template A<0>();
 }
 ```
 

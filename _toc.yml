@@ -8,7 +8,7 @@ chapters:
   - file: aliases
   - file: variable-templates
   - file: template-instantiation
-- file: traits-policies
+  - file: dependent-names
 - file: type-traits
 - file: generic-functions 
 - file: sfinae  
