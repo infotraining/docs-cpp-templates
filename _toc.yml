@@ -7,6 +7,7 @@ chapters:
   - file: class-templates
   - file: aliases
   - file: variable-templates
+  - file: template-instantiation
 - file: traits-policies
 - file: type-traits
 - file: generic-functions 
