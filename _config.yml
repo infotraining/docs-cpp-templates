@@ -30,6 +30,8 @@ repository:
 html:
   use_issues_button: true
   use_repository_button: true
+  analytics:
+    google_analytics_id: G-FDEL95YPHW
 
 # Configure your Binder links, such as the URL of the BinderHub.
 launch_buttons:
