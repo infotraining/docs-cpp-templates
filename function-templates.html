@@ -35,7 +35,7 @@
     <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=3d148d41" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=78a291d3" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341" />
@@ -184,12 +184,13 @@
 <li class="toctree-l2"><a class="reference internal" href="class-templates.html">Szablony klas</a></li>
 <li class="toctree-l2"><a class="reference internal" href="aliases.html">Aliasy szablonów</a></li>
 <li class="toctree-l2"><a class="reference internal" href="variable-templates.html">Szablony zmiennych</a></li>
+<li class="toctree-l2"><a class="reference internal" href="template-instantiation.html">Proces tworzenia instancji szablonu</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dependent-names.html">Nazwy zależne od typów</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="traits-policies.html">Klasy cech i wytycznych</a></li>
-<li class="toctree-l1"><a class="reference internal" href="type-traits.html">Biblioteka klas cech typów - &lt;type_traits&gt;</a></li>
+<li class="toctree-l1"><a class="reference internal" href="type-traits.html">Klasy cech typów - biblioteka &lt;type_traits&gt;</a></li>
 <li class="toctree-l1"><a class="reference internal" href="generic-functions.html">Funkcje szablonowe z auto</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sfinae.html">SFINAE - Substitution Failure Is Not An Error - enable_if</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sfinae.html">SFINAE - enable_if</a></li>
 <li class="toctree-l1"><a class="reference internal" href="concepts.html">Koncepty i ograniczenia szablonów</a></li>
 <li class="toctree-l1"><a class="reference internal" href="variadic-templates.html">Variadic templates</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fold-expressions.html">Fold expressions w C++17</a></li>
@@ -296,7 +297,7 @@
       
       
       
-      <li><a href="_sources/function-templates.rst" target="_blank"
+      <li><a href="_sources/function-templates.md" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -306,7 +307,7 @@
 <span class="btn__icon-container">
   <i class="fas fa-file"></i>
   </span>
-<span class="btn__text-container">.rst</span>
+<span class="btn__text-container">.md</span>
 </a>
 </li>
       
@@ -390,21 +391,39 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dedukcja-typu-argumentow-szablonu">Dedukcja typu argumentów szablonu</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tworzenie-instancji-szablonu">Tworzenie instancji szablonu</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fazy-kompilacji-szablonu">Fazy kompilacji szablonu</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#skladnia-definicji-szablonu-funkcji">Składnia definicji szablonu funkcji</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#przyklady-szablonow-funkcji">Przykłady szablonów funkcji</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prosty-szablon-funkcji-max-value">Prosty szablon funkcji max_value()</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#uzycie-szablonu-funkcji-max-value">Użycie szablonu funkcji max_value()</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dedukcja-typow-argumentow-szablonu">Dedukcja typów argumentów szablonu</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#podstawowe-reguly-dedukcji">Podstawowe reguły dedukcji</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#przyklady-dedukcji">Przykłady dedukcji</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rozwiazywanie-konfliktow-dedukcji">Rozwiązywanie konfliktów dedukcji</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dedukcja-arumentow">Dedukcja arumentów</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dedukcja-przy-przekazywaniu-przez-wartosc">Dedukcja przy przekazywaniu przez wartość</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dedukcja-przy-przekazywaniu-przez-referencje">Dedukcja przy przekazywaniu przez referencję</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dedukcja-przy-przekazywaniu-przez-referencje-do-r-value">Dedukcja przy przekazywaniu przez referencję do r-value</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#specjalizacja-funkcji-szablonowych">Specjalizacja funkcji szablonowych</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pelna-specjalizacja-full-specialization">Pełna specjalizacja (full specialization)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#przeciazanie">Przeciążanie</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#polaczenie-przeciazania-szablonow-specjalizacji-i-przeciazania-funkcji">Połączenie przeciążania szablonów, specjalizacji i przeciążania funkcji</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reguly-wyboru-przeciazenia">Reguły wyboru przeciążenia</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#przeciazanie-szablonow">Przeciążanie szablonów</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adres-wygenerowanej-funkcji">Adres wygenerowanej funkcji</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#wskazniki-do-funkcji-szablonowych">Wskaźniki do funkcji szablonowych</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#automatyczna-dedukcja-typu">Automatyczna dedukcja typu</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wskazniki-do-przeciazonych-szablonow-funckcji">Wskaźniki do przeciążonych szablonów funckcji</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parametry-szablonu-dla-wartosci-zwracanych-przez-funkcje">Parametry szablonu dla wartości zwracanych przez funkcję</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parametr-szablonu-okreslajacy-zwracany-typ">Parametr szablonu określający zwracany typ</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dedukcja-typu-zwracanego-z-funkcji-c-14">Dedukcja typu zwracanego z funkcji (C++14)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#uzycie-klasy-cech-type-traits">Użycie klasy cech (<em>type traits</em>)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#jawny-parametr-typu-zwracanego">1. Jawny parametr typu zwracanego</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#automatyczna-dedukcja-typu-zwracanego-c-14">2. Automatyczna dedukcja typu zwracanego (C++14)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trailing-return-decltype-c-11">3. Trailing return decltype (C++11)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#uzycie-type-traits">4. Użycie type traits</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#domyslne-parametry-szablonu">Domyślne parametry szablonu</a></li>
@@ -421,108 +440,229 @@ document.write(`
                   
   <section id="szablony-funkcji">
 <h1>Szablony funkcji<a class="headerlink" href="#szablony-funkcji" title="Link to this heading">#</a></h1>
-<p><strong>Szablon funkcji</strong> - funkcja, której typy argumentów lub typ zwracanej wartości zostały sparametryzowane.</p>
-<p>Składnia definicji szablonu funkcji:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">comma_separated_list_of_parameters</span><span class="w"> </span><span class="o">&gt;</span>
-<span class="n">return_type</span><span class="w"> </span><span class="n">function_name</span><span class="p">(</span><span class="n">list_of_args</span><span class="p">)</span>
+<p><strong>Szablon funkcji</strong> - funkcja, której typy argumentów lub typ zwracanej wartości zostały sparametryzowane. Szablony funkcji są fundamentalnym mechanizmem programowania generycznego w C++, pozwalającym na pisanie kodu wielokrotnego użytku, który działa z różnymi typami danych przy zachowaniu bezpieczeństwa typów w czasie kompilacji.</p>
+<section id="skladnia-definicji-szablonu-funkcji">
+<h2>Składnia definicji szablonu funkcji<a class="headerlink" href="#skladnia-definicji-szablonu-funkcji" title="Link to this heading">#</a></h2>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// Definicja szablonu funkcji</span>
+<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w">  </span><span class="c1">// lub template &lt;class T&gt;</span>
+<span class="n">return_type_declaration</span><span class="w"> </span><span class="n">function_name</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="n">arg</span><span class="p">)</span>
 <span class="p">{</span>
-<span class="w">    </span><span class="c1">//...</span>
+<span class="w">    </span><span class="c1">// implementacja</span>
+<span class="p">}</span>
+
+<span class="c1">// Wiele parametrów szablonu</span>
+<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">U</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">TResult</span><span class="o">&gt;</span>
+<span class="n">TResult</span><span class="w"> </span><span class="n">function_name</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="n">arg1</span><span class="p">,</span><span class="w"> </span><span class="n">U</span><span class="w"> </span><span class="n">arg2</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="c1">// implementacja</span>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Przykład definicji szablonu funkcji <code class="docutils literal notranslate"><span class="pre">max()</span></code>:</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Słowa kluczowe <code class="docutils literal notranslate"><span class="pre">typename</span></code> i <code class="docutils literal notranslate"><span class="pre">class</span></code> są w tym kontekście równoważne. Zaleca się używanie <code class="docutils literal notranslate"><span class="pre">typename</span></code> dla lepszej czytelności.</p>
+</div>
+</section>
+<section id="przyklady-szablonow-funkcji">
+<h2>Przykłady szablonów funkcji<a class="headerlink" href="#przyklady-szablonow-funkcji" title="Link to this heading">#</a></h2>
+<section id="prosty-szablon-funkcji-max-value">
+<h3>Prosty szablon funkcji max_value()<a class="headerlink" href="#prosty-szablon-funkcji-max-value" title="Link to this heading">#</a></h3>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
-<span class="n">T</span><span class="w"> </span><span class="n">max</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">b</span><span class="p">)</span>
+<span class="n">T</span><span class="w"> </span><span class="n">max_value</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">b</span><span class="p">)</span>
 <span class="p">{</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Użycie szablonu funkcji <code class="docutils literal notranslate"><span class="pre">max()</span></code>:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="n">val1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">::</span><span class="n">max</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span><span class="p">);</span>
+</section>
+<section id="uzycie-szablonu-funkcji-max-value">
+<h3>Użycie szablonu funkcji max_value()<a class="headerlink" href="#uzycie-szablonu-funkcji-max-value" title="Link to this heading">#</a></h3>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// Jawne podanie typu argumentu szablonu</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">result_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">max_value</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span><span class="p">);</span>
 
+<span class="c1">// Automatyczna dedukcja typu argumentu szablonu</span>
 <span class="kt">double</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">4.50</span><span class="p">;</span>
 <span class="kt">double</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">3.14</span><span class="p">;</span>
-<span class="kt">double</span><span class="w"> </span><span class="n">val2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">::</span><span class="n">max</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">);</span>
+<span class="kt">double</span><span class="w"> </span><span class="n">result_2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">max_value</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">);</span><span class="w">  </span><span class="c1">// T dedukowane jako double</span>
 
+<span class="c1">// Działa z dowolnym typem implementującym operator&lt;</span>
 <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">s1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;mathematics&quot;</span><span class="p">;</span>
 <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">s2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;math&quot;</span><span class="p">;</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;max(s1, s2) = &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="o">::</span><span class="n">max</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span><span class="w"> </span><span class="n">s2</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;max_value(s1, s2) = &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">max_value</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span><span class="w"> </span><span class="n">s2</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39;\n&#39;</span><span class="p">;</span>
 </pre></div>
 </div>
-<section id="dedukcja-typu-argumentow-szablonu">
-<h2>Dedukcja typu argumentów szablonu<a class="headerlink" href="#dedukcja-typu-argumentow-szablonu" title="Link to this heading">#</a></h2>
-<p>W momencie wywołania funkcji szablonowej <code class="docutils literal notranslate"><span class="pre">max()</span></code> następuje proces dedukcji tych typów argumentów szablonu, które nie zostały podane w ostrych nawiasach <code class="docutils literal notranslate"><span class="pre">&lt;&gt;</span></code>. Typy argumentów szablonu dedukowane są na podstawie typu argumentów funkcji.</p>
-<p>Reguły dedukcji typów dla szablonów funkcji:</p>
+</section>
+</section>
+<section id="dedukcja-typow-argumentow-szablonu">
+<h2>Dedukcja typów argumentów szablonu<a class="headerlink" href="#dedukcja-typow-argumentow-szablonu" title="Link to this heading">#</a></h2>
+<p>W momencie wywołania funkcji szablonowej następuje proces <strong>dedukcji typów argumentów szablonu</strong> (<em>template argument deduction</em>). Typy parametrów szablonu, które nie zostały podane jawnie w ostrych nawiasach <code class="docutils literal notranslate"><span class="pre">&lt;&gt;</span></code>, są dedukowane na podstawie typów argumentów przekazanych do funkcji.</p>
+<section id="podstawowe-reguly-dedukcji">
+<h3>Podstawowe reguły dedukcji<a class="headerlink" href="#podstawowe-reguly-dedukcji" title="Link to this heading">#</a></h3>
 <ul class="simple">
-<li><p>Każdy parametr funkcji może brać udział (lub nie) w procesie dedukcji parametru szablonu</p></li>
+<li><p>Każdy parametr funkcji może (ale nie musi) brać udział w procesie dedukcji parametru szablonu</p></li>
 <li><p>Wszystkie dedukcje są przeprowadzane niezależnie od siebie</p></li>
-<li><p>Na zakończenie procesu dedukcji kompilator sprawdza, czy każdy parametr szablonu został wydedukowany i czy nie ma konfliktów między wydedukowanymi parametrami</p></li>
-<li><p>Każdy parametr funkcji, który bierze udział w procesie dedukcji musi ściśle pasować do typu argumentu funkcji - niejawne konwersje są zabronione</p></li>
+<li><p>Na zakończenie procesu kompilator sprawdza, czy:</p>
+<ul>
+<li><p>każdy parametr szablonu został wydedukowany</p></li>
+<li><p>nie ma konfliktów między wydedukowanymi parametrami</p></li>
+<li><p>wszystkie ograniczenia (<em>constraints</em>) są spełnione</p></li>
 </ul>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">U</span><span class="o">&gt;</span>
+</li>
+<li><p>Parametry funkcji biorące udział w dedukcji muszą <strong>ściśle pasować</strong> do typu argumentu - <strong>niejawne konwersje są zabronione</strong></p></li>
+</ul>
+</section>
+<section id="przyklady-dedukcji">
+<h3>Przykłady dedukcji<a class="headerlink" href="#przyklady-dedukcji" title="Link to this heading">#</a></h3>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">U</span><span class="o">&gt;</span>
 <span class="kt">void</span><span class="w"> </span><span class="n">f</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">U</span><span class="w"> </span><span class="n">y</span><span class="p">);</span>
 
 <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
 <span class="kt">void</span><span class="w"> </span><span class="n">g</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">y</span><span class="p">);</span>
 
+<span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">void</span><span class="w"> </span><span class="n">h</span><span class="p">(</span><span class="n">T</span><span class="o">*</span><span class="w"> </span><span class="n">ptr</span><span class="p">);</span>
+
 <span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span>
 <span class="p">{</span>
-<span class="w">    </span><span class="n">f</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span><span class="w"> </span><span class="c1">// void f(T, U) [T = int, U = int]</span>
-<span class="w">    </span><span class="n">g</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span><span class="w"> </span><span class="c1">// void g(T, T) [T = int]</span>
-<span class="w">    </span><span class="n">g</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2u</span><span class="p">);</span><span class="w"> </span><span class="c1">// error: no matching function for call to g(int, unsigned int)</span>
+<span class="w">    </span><span class="c1">// Różne typy dla różnych parametrów - OK</span>
+<span class="w">    </span><span class="n">f</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span><span class="w">      </span><span class="c1">// void f(T, U) [T = int, U = int]</span>
+<span class="w">    </span><span class="n">f</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mf">2.5</span><span class="p">);</span><span class="w">    </span><span class="c1">// void f(T, U) [T = int, U = double]</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c1">// Ten sam typ dla obu parametrów - OK</span>
+<span class="w">    </span><span class="n">g</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span><span class="w">      </span><span class="c1">// void g(T, T) [T = int]</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c1">// Konflikt typów - Error</span>
+<span class="w">    </span><span class="n">g</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2u</span><span class="p">);</span><span class="w">     </span><span class="c1">// Error: no matching function for call to g(int, unsigned int)</span>
+<span class="w">    </span><span class="n">g</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mf">2.5</span><span class="p">);</span><span class="w">    </span><span class="c1">// Error: no matching function for call to g(int, double)</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c1">// Dedukcja ze wskaźników</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span>
+<span class="w">    </span><span class="n">h</span><span class="p">(</span><span class="o">&amp;</span><span class="n">value</span><span class="p">);</span><span class="w">    </span><span class="c1">// void h(T*) [T = int]</span>
 <span class="p">}</span>
 </pre></div>
 </div>
+</section>
+<section id="rozwiazywanie-konfliktow-dedukcji">
+<h3>Rozwiązywanie konfliktów dedukcji<a class="headerlink" href="#rozwiazywanie-konfliktow-dedukcji" title="Link to this heading">#</a></h3>
 <p>W przypadku, gdy w procesie dedukcji wykryte zostaną konflikty:</p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">short</span><span class="w"> </span><span class="nf">f</span><span class="p">();</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">short</span><span class="w"> </span><span class="n">short_number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
 
-<span class="k">auto</span><span class="w"> </span><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">::</span><span class="n">max</span><span class="p">(</span><span class="n">f</span><span class="p">(),</span><span class="w"> </span><span class="mi">42</span><span class="p">);</span><span class="w"> </span><span class="c1">// ERROR - no matching function</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">max_value</span><span class="p">(</span><span class="n">short_number</span><span class="p">,</span><span class="w"> </span><span class="mi">42</span><span class="p">);</span><span class="w"> </span><span class="c1">// ERROR - conflicting types: short vs int</span>
 </pre></div>
 </div>
-<p>istnieją dwa rozwiązania:</p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// #1</span>
-<span class="k">auto</span><span class="w"> </span><span class="n">val1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">::</span><span class="n">max</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">f</span><span class="p">()),</span><span class="w"> </span><span class="mi">42</span><span class="p">);</span><span class="w"> </span><span class="c1">// OK</span>
+<p>istnieją trzy główne rozwiązania:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// Rozwiązanie #1: Jawne rzutowanie argumentu</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">val_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">max_value</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">short_number</span><span class="p">),</span><span class="w"> </span><span class="mi">42</span><span class="p">);</span><span class="w"> </span><span class="c1">// OK</span>
 
-<span class="c1">// #2</span>
-<span class="k">auto</span><span class="w"> </span><span class="n">val2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">::</span><span class="n">max</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">f</span><span class="p">(),</span><span class="w"> </span><span class="mi">42</span><span class="p">);</span><span class="w"> </span><span class="c1">// OK</span>
-</pre></div>
-</div>
-</section>
-<section id="tworzenie-instancji-szablonu">
-<h2>Tworzenie instancji szablonu<a class="headerlink" href="#tworzenie-instancji-szablonu" title="Link to this heading">#</a></h2>
-<p>Koncepcja szablonów wykracza poza zwykły model kompilacji (konsolidacji). Cały kod szablonu powinien być umieszczony w jednym pliku nagłówkowym. Dołączając następnie zawartość pliku nagłówkowego do kodu aplikacji umożliwiamy generację i kompilację kodu dla konkretnych typów.</p>
-<p>Tworzenie <strong>instancji szablonu</strong> - proces, w którym na podstawie szablonu generowany jest kod, który zostanie skompilowany.</p>
-<p>Utworzenie instancji szablonu jest możliwe tylko wtedy, gdy dla typu podanego jako argument szablonu zdefiniowane są wszystkie operacje używane przez szablon, np. operatory <code class="docutils literal notranslate"><span class="pre">&lt;</span></code>, <code class="docutils literal notranslate"><span class="pre">==</span></code>, <code class="docutils literal notranslate"><span class="pre">!=</span></code>, wywołania konkretnych metod, itp.</p>
-<section id="fazy-kompilacji-szablonu">
-<h3>Fazy kompilacji szablonu<a class="headerlink" href="#fazy-kompilacji-szablonu" title="Link to this heading">#</a></h3>
-<p>Proces kompilacji szablonu przebiega w dwóch fazach:</p>
-<ol class="arabic simple">
-<li><p>Na etapie definicji szablonu, ale bez tworzenia jego instancji kod jest sprawdzany pod względem poprawności bez uwzględniania parametrów szablonu:</p>
-<ul class="simple">
-<li><p>wykrywane są błędy składniowe</p></li>
-<li><p>wykrywane jest użycie nieznanych nazw (typów, funkcji, itp. ), które nie zależą od parametru szablonu</p></li>
-<li><p>sprawdzane są statyczne asercje, które nie zależą od parametru szablonu</p></li>
-</ul>
-</li>
-<li><p>Podczas tworzenia instancji szablonu, kod szablonu jest jeszcze raz sprawdzany. W szczególności sprawdzane są części, które zależą od parametrów szablonu.</p></li>
-</ol>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
-<span class="kt">void</span><span class="w"> </span><span class="n">foo</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="n">t</span><span class="p">)</span>
+<span class="c1">// Rozwiązanie #2: Jawne podanie typu szablonu</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">val_2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">max_value</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">short_number</span><span class="p">,</span><span class="w"> </span><span class="mi">42</span><span class="p">);</span><span class="w"> </span><span class="c1">// OK - niejawna konwersja short -&gt; int</span>
+
+<span class="c1">// Rozwiązanie #3: Użycie szablonu z różnymi typami</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T1</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">T2</span><span class="o">&gt;</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">max_value</span><span class="p">(</span><span class="n">T1</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">T2</span><span class="w"> </span><span class="n">b</span><span class="p">)</span>
 <span class="p">{</span>
-<span class="w">    </span><span class="n">undeclared</span><span class="p">();</span><span class="w">   </span><span class="c1">// first-phase compile-time error if undeclared() unknown</span>
-<span class="w">    </span><span class="n">undeclared</span><span class="p">(</span><span class="n">t</span><span class="p">);</span><span class="w">  </span><span class="c1">// second-phase compile-time error if undeclared(T) unknown</span>
-<span class="w">    </span><span class="k">static_assert</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;int too small&quot;</span><span class="p">);</span><span class="w">  </span><span class="c1">// always fails if sizeof(int)&lt;=10</span>
-<span class="w">    </span><span class="k">static_assert</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">T</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;T too small&quot;</span><span class="p">);</span><span class="w">  </span><span class="c1">// fails if instantiated for T with size &lt;=10</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
 <span class="p">}</span>
+
+<span class="k">auto</span><span class="w"> </span><span class="n">val_3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">max_value</span><span class="p">(</span><span class="n">short_number</span><span class="p">,</span><span class="w"> </span><span class="mi">42</span><span class="p">);</span><span class="w"> </span><span class="c1">// OK - T1=short, T2=int</span>
 </pre></div>
 </div>
 </section>
+<section id="dedukcja-arumentow">
+<h3>Dedukcja arumentów<a class="headerlink" href="#dedukcja-arumentow" title="Link to this heading">#</a></h3>
+<p>Dedukcja typów szablonu zależy od sposobu przekazywania argumentów do funkcji. Możemy wyróżnić trzy główne przypadki:</p>
+</section>
+</section>
+<section id="dedukcja-przy-przekazywaniu-przez-wartosc">
+<h2>Dedukcja przy przekazywaniu przez wartość<a class="headerlink" href="#dedukcja-przy-przekazywaniu-przez-wartosc" title="Link to this heading">#</a></h2>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">void</span><span class="w"> </span><span class="n">deduce_1</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="n">arg</span><span class="p">){}</span><span class="w">    </span><span class="c1">// przekazywanie przez wartość</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span>
+<span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">cx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span>
+<span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="o">&amp;</span><span class="w"> </span><span class="n">rx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="p">;</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">buffer</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">foo</span><span class="p">(</span><span class="kt">int</span><span class="p">);</span>
+
+<span class="n">deduce_1</span><span class="p">(</span><span class="n">x</span><span class="p">);</span><span class="w">      </span><span class="c1">// T = int (const i &amp; są ignorowane)</span>
+<span class="n">deduce_1</span><span class="p">(</span><span class="n">cx</span><span class="p">);</span><span class="w">     </span><span class="c1">// T = int</span>
+<span class="n">deduce_1</span><span class="p">(</span><span class="n">rx</span><span class="p">);</span><span class="w">     </span><span class="c1">// T = int</span>
+<span class="n">deduce_1</span><span class="p">(</span><span class="n">buffer</span><span class="p">);</span><span class="w"> </span><span class="c1">// T = int* (tablice rozpadają się do wskaźników)</span>
+<span class="n">deduce_1</span><span class="p">(</span><span class="n">foo</span><span class="p">);</span><span class="w">    </span><span class="c1">// T = void(*)(int) (funkcje rozpadają się do wskaźników)</span>
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Przy przekazywaniu przez wartość <strong>const</strong> i referencje są ignorowane (usuwane) podczas dedukcji typu szablonu.</p>
+<p>Tablice i funkcje rozpadają się do wskaźników (<em>decay to pointer</em>).</p>
+</div>
+</section>
+<section id="dedukcja-przy-przekazywaniu-przez-referencje">
+<h2>Dedukcja przy przekazywaniu przez referencję<a class="headerlink" href="#dedukcja-przy-przekazywaniu-przez-referencje" title="Link to this heading">#</a></h2>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">void</span><span class="w"> </span><span class="n">deduce_2</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;</span><span class="w"> </span><span class="n">arg</span><span class="p">){}</span><span class="w">     </span><span class="c1">// przekazywanie przez referencję</span>
+
+<span class="n">deduce_2</span><span class="p">(</span><span class="n">x</span><span class="p">);</span><span class="w">   </span><span class="c1">// T = int; typ argumentu funcji = int&amp;</span>
+<span class="n">deduce_2</span><span class="p">(</span><span class="n">cx</span><span class="p">);</span><span class="w">  </span><span class="c1">// T = const int; typ argumentu funcji = const int&amp;</span>
+<span class="n">deduce_2</span><span class="p">(</span><span class="n">rx</span><span class="p">);</span><span class="w">  </span><span class="c1">// T = const int; typ argumentu funcji = const int&amp;</span>
+<span class="n">deduce_2</span><span class="p">(</span><span class="n">buffer</span><span class="p">);</span><span class="w"> </span><span class="c1">// T = int[5]; typ argumentu funcji = int(&amp;)[5]</span>
+<span class="n">deduce_2</span><span class="p">(</span><span class="n">foo</span><span class="p">);</span><span class="w">    </span><span class="c1">// T - void(int); typ argumentu funcji = void(&amp;)(int)</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">void</span><span class="w"> </span><span class="n">deduce_3</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">T</span><span class="o">&amp;</span><span class="w"> </span><span class="n">arg</span><span class="p">){}</span><span class="w">  </span><span class="c1">// przekazywanie przez const referencję</span>
+
+<span class="n">deduce_3</span><span class="p">(</span><span class="n">x</span><span class="p">);</span><span class="w">   </span><span class="c1">// T = int; typ argumentu funcji = const int&amp;</span>
+<span class="n">deduce_3</span><span class="p">(</span><span class="n">cx</span><span class="p">);</span><span class="w">  </span><span class="c1">// T = int; typ argumentu funcji = const int&amp;</span>
+<span class="n">deduce_3</span><span class="p">(</span><span class="n">rx</span><span class="p">);</span><span class="w">  </span><span class="c1">// T = int; typ argumentu funcji = const int&amp;</span>
+<span class="n">deduce_3</span><span class="p">(</span><span class="n">buffer</span><span class="p">);</span><span class="w"> </span><span class="c1">// T = int[5]; typ argumentu funcji = const int(&amp;)[5]</span>
+<span class="n">deduce_3</span><span class="p">(</span><span class="n">foo</span><span class="p">);</span><span class="w">    </span><span class="c1">// T = void(int); typ argumentu funcji = void(&amp;)(int)</span>
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Przy przekazywaniu parametru funkcji przez referencję <strong>const</strong> jest zachowywane w dedukowanym typie szablonu. Tablice i funkcje <strong>nie rozpadają się</strong> do wskaźników.</p>
+</div>
+</section>
+<section id="dedukcja-przy-przekazywaniu-przez-referencje-do-r-value">
+<h2>Dedukcja przy przekazywaniu przez referencję do r-value<a class="headerlink" href="#dedukcja-przy-przekazywaniu-przez-referencje-do-r-value" title="Link to this heading">#</a></h2>
+<p>Przekazanie referencji do <em>r-value</em> (<code class="docutils literal notranslate"><span class="pre">T&amp;&amp;</span></code>) w kontekście dedukcji typu nazwywane jest przekazaniem <strong>uniwersalnej referencji</strong>.
+Wynika to z faktu, że w procesie dedukcji <code class="docutils literal notranslate"><span class="pre">T&amp;&amp;</span></code> dopasuje się zarówno do <em>l-value</em> jak i <em>r-value</em>.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">void</span><span class="w"> </span><span class="n">deduce_4</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">arg</span><span class="p">);</span><span class="w">    </span><span class="c1">// przekazywanie przez referencję do r-value</span>
+<span class="p">{</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span>
+<span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">cx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span>
+
+<span class="c1">// passing l-value</span>
+<span class="n">deduce_4</span><span class="p">(</span><span class="n">x</span><span class="p">);</span><span class="w">      </span><span class="c1">// T = int&amp;; typ argumentu funcji = int&amp;</span>
+<span class="n">deduce_4</span><span class="p">(</span><span class="n">cx</span><span class="p">);</span><span class="w">     </span><span class="c1">// T = const int&amp;; typ argumentu funcji = const int&amp;</span>
+
+<span class="c1">// passing r-value</span>
+<span class="n">deduce_4</span><span class="p">(</span><span class="mi">42</span><span class="p">);</span><span class="w">     </span><span class="c1">// T = int; typ argumentu funcji = int&amp;&amp;</span>
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Dedukcja typu parametrus szablonu oraz typu argumentu funkcji zależy od tego, czy przekazywany argument jest <em>l-value</em> czy <em>r-value</em>.</p>
+<ol class="arabic simple">
+<li><p>Przy przekazaniu <em>l-value</em> typ szablonu jest dedukowany jako referencja do <em>l-value</em> (T&amp; lub const T&amp;), a referencja <code class="docutils literal notranslate"><span class="pre">T&amp;&amp;</span></code> staje się zwykłą referencją do <em>l-value</em> (<code class="docutils literal notranslate"><span class="pre">T&amp;</span></code> lub const <code class="docutils literal notranslate"><span class="pre">T&amp;</span></code>). Zamiana rodzaju referencji na <em>l-value</em> nazywana jest <strong>kolapsem referencji</strong> (<em>reference collapsing</em>).</p></li>
+<li><p>Przy przekazaniu <em>r-value</em> typ szablonu jest dedukowany jako zwykły typ (T lub const T), a referencja <code class="docutils literal notranslate"><span class="pre">T&amp;&amp;</span></code> pozostaje referencją do <em>r-value</em> (<code class="docutils literal notranslate"><span class="pre">T&amp;&amp;</span></code> lub const <code class="docutils literal notranslate"><span class="pre">T&amp;&amp;</span></code>).</p></li>
+</ol>
+</div>
 </section>
 <section id="specjalizacja-funkcji-szablonowych">
 <h2>Specjalizacja funkcji szablonowych<a class="headerlink" href="#specjalizacja-funkcji-szablonowych" title="Link to this heading">#</a></h2>
-<p>W specjalnych przypadkach istnieje możliwość zdefiniowania funkcji specjalizowanej.</p>
-<p>Zdefiniujmy najpierw pierwszy szablon funkcji:</p>
+<p><strong>Specjalizacja szablonu funkcji</strong> pozwala na dostarczenie alternatywnej implementacji dla konkretnych typów lub zestawów typów.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Dla szablonów funkcji <strong>nie jest możliwa częściowa specjalizacja</strong>. Możliwe jest jedynie pełne wyspecjalizowanie szablonu dla konkretnych typów.</p>
+<p>Zamiast częściowej specjalizacji należy użyć <strong>przeciążenia</strong>.</p>
+</div>
+<section id="pelna-specjalizacja-full-specialization">
+<h3>Pełna specjalizacja (full specialization)<a class="headerlink" href="#pelna-specjalizacja-full-specialization" title="Link to this heading">#</a></h3>
+<p>Zdefiniujmy najpierw szablon główny:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
 <span class="kt">bool</span><span class="w"> </span><span class="n">is_greater</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">b</span><span class="p">)</span>
 <span class="p">{</span>
@@ -530,127 +670,317 @@ document.write(`
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Jeśli wywołamy ten szablon dla literałów znakowych “abc” i “def” utworzona zostanie instancja szablonu, która porówna
-adresy przechowywane we wskaźnikach a nie tekst. Aby zapewnić prawidłowe porównanie c-łańcuchów musimy dostarczyć specjalizowaną wersję szablonu dla parametru <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">char*</span></code>:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;&gt;</span>
+<p>Wywołanie tego szablonu dla literałów znakowych <code class="docutils literal notranslate"><span class="pre">&quot;abc&quot;</span></code> i <code class="docutils literal notranslate"><span class="pre">&quot;def&quot;</span></code> utworzy instancję, która porówna adresy wskaźników zamiast zawartości c-łańcuchów. Aby zapewnić prawidłowe porównanie tekstów, dostarczamy specjalizowaną wersję:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// Pełna specjalizacja dla const char*</span>
+<span class="k">template</span><span class="w"> </span><span class="o">&lt;&gt;</span>
 <span class="kt">bool</span><span class="w"> </span><span class="n">is_greater</span><span class="o">&lt;</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*&gt;</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">b</span><span class="p">)</span>
 <span class="p">{</span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">strcmp</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">strcmp</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
 
-<span class="n">is_grater</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">);</span><span class="w"> </span><span class="c1">// wywołanie funkcji szablonowej</span>
-<span class="c1">//...</span>
-<span class="n">is_greater</span><span class="p">(</span><span class="s">&quot;a&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;g&quot;</span><span class="p">);</span><span class="w"> </span><span class="c1">// wywołanie funkcji specjalizowanej dla const char*</span>
+<span class="c1">// Użycie</span>
+<span class="n">is_greater</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">);</span><span class="w">      </span><span class="c1">// wywołanie szablonu głównego</span>
+<span class="n">is_greater</span><span class="p">(</span><span class="s">&quot;abc&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;def&quot;</span><span class="p">);</span><span class="w"> </span><span class="c1">// wywołanie wersji specjalizowanej</span>
 </pre></div>
 </div>
-<p>Ponieważ podawanie typu specjalizowanego w ostrych nawiasach jest redundantne można specjalizację szablonu funkcji
-zapisać w sposób następujący:</p>
+<p>Ponieważ podawanie typu w nawiasach ostrych jest redundantne (kompilator może go wydedukować), specjalizację można zapisać krócej:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;&gt;</span>
+<span class="kt">bool</span><span class="w"> </span><span class="n">is_greater</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w">  </span><span class="c1">// bez &lt;const char*&gt;</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">strcmp</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Specjalizacje muszą być zadeklarowane <strong>po</strong> szablonie głównym i <strong>przed</strong> jego pierwszym użyciem.</p>
+</div>
+</section>
+<section id="przeciazanie">
+<h3>Przeciążanie<a class="headerlink" href="#przeciazanie" title="Link to this heading">#</a></h3>
+<p>W praktyce <strong>zaleca się używanie techniki przeciążenia</strong> zamiast jawnej specjalizacji szablonów funkcji:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// Szablon główny</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstring&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="c1">// Szablon główny</span>
+<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">bool</span><span class="w"> </span><span class="n">is_greater</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">b</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Generic version called</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// Przeciążenie szablonu dla wskaźników</span>
+<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">bool</span><span class="w"> </span><span class="n">is_greater</span><span class="p">(</span><span class="n">T</span><span class="o">*</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="o">*</span><span class="w"> </span><span class="n">b</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Pointer version called</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="o">*</span><span class="n">a</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="n">b</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// Zwykłe przeciążenie dla C-string(nieszablonowe)</span>
 <span class="kt">bool</span><span class="w"> </span><span class="n">is_greater</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">b</span><span class="p">)</span>
 <span class="p">{</span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">strcmp</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-<p>W praktyce zamiast stosować jawną specjalizację szablonu funkcji można wykorzystać przeciążenie funkcji <code class="docutils literal notranslate"><span class="pre">is_greater()</span></code>:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">bool</span><span class="w"> </span><span class="nf">is_greater</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">b</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">strcmp</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-<section id="polaczenie-przeciazania-szablonow-specjalizacji-i-przeciazania-funkcji">
-<h3>Połączenie przeciążania szablonów, specjalizacji i przeciążania funkcji<a class="headerlink" href="#polaczenie-przeciazania-szablonow-specjalizacji-i-przeciazania-funkcji" title="Link to this heading">#</a></h3>
-<p>Przykład wykorzystania specjalizacji lub przeciążenia szablonu funkcji:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">sqrt</span><span class="p">(</span><span class="n">T</span><span class="p">);</span><span class="w"> </span><span class="c1">// basic template sqrt&lt;T&gt;</span>
-<span class="k">template</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">sqrt</span><span class="p">(</span><span class="kt">float</span><span class="p">);</span><span class="w">   </span><span class="c1">// specialization of template sqrt&lt;float&gt;</span>
-<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">complex</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">sqrt</span><span class="p">(</span><span class="n">complex</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">);</span><span class="w">  </span><span class="c1">// overloaded template sqrt for complex&lt;T&gt; arguments</span>
-<span class="kt">double</span><span class="w"> </span><span class="nf">sqrt</span><span class="p">(</span><span class="kt">double</span><span class="p">);</span><span class="w"> </span><span class="c1">// overloaded function sqrt(double)</span>
-
-<span class="c1">//...</span>
-
-<span class="kt">void</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">complex</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">z</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">   </span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span><span class="w">   </span><span class="c1">// sqrt&lt;int&gt;(int)</span>
-<span class="w">   </span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.0</span><span class="p">);</span><span class="w"> </span><span class="c1">// sqrt(double)</span>
-<span class="w">   </span><span class="n">sqrt</span><span class="p">(</span><span class="n">z</span><span class="p">);</span><span class="w">   </span><span class="c1">// sqrt&lt;double&gt;(complex&lt;double&gt;)</span>
-<span class="w">   </span><span class="n">sqrt</span><span class="p">(</span><span class="mf">3.14f</span><span class="p">);</span><span class="w"> </span><span class="c1">// sqrt&lt;float&gt;(float)</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-</section>
-</section>
-<section id="przeciazanie-szablonow">
-<h2>Przeciążanie szablonów<a class="headerlink" href="#przeciazanie-szablonow" title="Link to this heading">#</a></h2>
-<p>W programie może obok siebie istnieć mając tę samą nazwę:</p>
-<ul class="simple">
-<li><p>kilka szablonów funkcji – byle produkowały funkcje o odmiennych argumentach,</p></li>
-<li><p>funkcje, o argumentach takich, że mogłyby zostać wyprodukowane przez któryś z szablonów (funkcje specjalizowane),</p></li>
-<li><p>funkcje o argumentach takich, że nie mógłby ich wyprodukować żaden z istniejących szablonów (zwykłe przeładowanie).</p></li>
-</ul>
-</section>
-<section id="adres-wygenerowanej-funkcji">
-<h2>Adres wygenerowanej funkcji<a class="headerlink" href="#adres-wygenerowanej-funkcji" title="Link to this heading">#</a></h2>
-<p>Możliwe jest pobranie adresu funkcji wygenerowanej na podstawie szablonu.</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">f</span><span class="p">(</span><span class="n">T</span><span class="o">*</span><span class="w"> </span><span class="n">ptr</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">   </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;funkcja szablonowa f(T*)&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="kt">void</span><span class="w"> </span><span class="n">h</span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">pf</span><span class="p">)(</span><span class="kt">int</span><span class="o">*</span><span class="p">))</span>
-<span class="p">{</span>
-<span class="w">   </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;h( void (*pf)(int*)&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;C-string version called</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">b</span><span class="p">);</span>
 <span class="p">}</span>
 
 <span class="kt">int</span><span class="w"> </span><span class="n">main</span><span class="p">()</span>
 <span class="p">{</span>
-<span class="w">   </span><span class="n">h</span><span class="p">(</span><span class="o">&amp;</span><span class="n">f</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">);</span><span class="w">    </span><span class="c1">// przekazanie adresu funkcji wygenerowanej</span>
-<span class="w">                  </span><span class="c1">// na podstawie szablonu</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">is_greater</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39;\n&#39;</span><span class="p">;</span><span class="w">               </span><span class="c1">// Generic version</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">is_greater</span><span class="p">(</span><span class="mf">4.5</span><span class="p">,</span><span class="w"> </span><span class="mf">3.14</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39;\n&#39;</span><span class="p">;</span><span class="w">          </span><span class="c1">// Generic version</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">is_greater</span><span class="p">(</span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39;\n&#39;</span><span class="p">;</span><span class="w">  </span><span class="c1">// C-string version</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">20</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">is_greater</span><span class="p">(</span><span class="o">&amp;</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39;\n&#39;</span><span class="p">;</span><span class="w">             </span><span class="c1">// Pointer version</span>
 <span class="p">}</span>
 </pre></div>
 </div>
+</section>
+<section id="polaczenie-przeciazania-szablonow-specjalizacji-i-przeciazania-funkcji">
+<h3>Połączenie przeciążania szablonów, specjalizacji i przeciążania funkcji<a class="headerlink" href="#polaczenie-przeciazania-szablonow-specjalizacji-i-przeciazania-funkcji" title="Link to this heading">#</a></h3>
+<p>W programie może współistnieć (mając tę samą nazwę):</p>
+<ul class="simple">
+<li><p><strong>Kilka szablonów funkcji</strong> – o różnych sygnaturach parametrów</p></li>
+<li><p><strong>W pełni specjalizowane szablony funkcji</strong></p></li>
+<li><p><strong>Zwykłe funkcje</strong> – przeciążenia nieszablonowe</p></li>
+</ul>
+<p>Kompletny przykład ilustrujący różne techniki:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;complex&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="c1">// Szablon główny</span>
+<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"> </span>
+<span class="n">T</span><span class="w"> </span><span class="n">sqrt</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="n">value</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Generic template sqrt&lt;T&gt;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">value</span><span class="p">;</span><span class="w">  </span><span class="c1">// uproszczona implementacja</span>
+<span class="p">}</span>
+
+<span class="c1">// Pełna specjalizacja szablonu</span>
+<span class="k">template</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span>
+<span class="kt">float</span><span class="w"> </span><span class="n">sqrt</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">value</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Specialization sqrt&lt;float&gt;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">sqrt</span><span class="p">(</span><span class="n">value</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// Przeciążenie szablonu dla std::complex</span>
+<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"> </span>
+<span class="n">std</span><span class="o">::</span><span class="n">complex</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">sqrt</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">complex</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">value</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Overloaded template sqrt for complex&lt;T&gt;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">sqrt</span><span class="p">(</span><span class="n">value</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// Zwykłe przeciążenie (nieszablonowe)</span>
+<span class="kt">double</span><span class="w"> </span><span class="n">sqrt</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">value</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Overloaded function sqrt(double)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">sqrt</span><span class="p">(</span><span class="n">value</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="n">f</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">complex</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">z</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span><span class="w">        </span><span class="c1">// sqrt&lt;int&gt;(int) - szablon główny</span>
+<span class="w">    </span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.0</span><span class="p">);</span><span class="w">      </span><span class="c1">// sqrt(double) - przeciążenie nieszablonowe</span>
+<span class="w">    </span><span class="n">sqrt</span><span class="p">(</span><span class="n">z</span><span class="p">);</span><span class="w">        </span><span class="c1">// sqrt&lt;double&gt;(complex&lt;double&gt;) - przeciążony szablon</span>
+<span class="w">    </span><span class="n">sqrt</span><span class="p">(</span><span class="mf">3.14f</span><span class="p">);</span><span class="w">    </span><span class="c1">// sqrt&lt;float&gt;(float) - specjalizacja</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="reguly-wyboru-przeciazenia">
+<h3>Reguły wyboru przeciążenia<a class="headerlink" href="#reguly-wyboru-przeciazenia" title="Link to this heading">#</a></h3>
+<p>Kompilator stosuje następującą hierarchię dopasowania:</p>
+<ol class="arabic simple">
+<li><p><strong>Dokładne dopasowanie z funkcją nieszablonową</strong> - najwyższy priorytet</p></li>
+<li><p><strong>Dokładne dopasowanie z funkcją szablonową</strong></p></li>
+<li><p><strong>Dopasowanie z konwersją dla funkcji nieszablonowej</strong></p></li>
+<li><p>Błąd kompilacji, jeśli nie można znaleźć dopasowania</p></li>
+</ol>
+</section>
+</section>
+<section id="wskazniki-do-funkcji-szablonowych">
+<h2>Wskaźniki do funkcji szablonowych<a class="headerlink" href="#wskazniki-do-funkcji-szablonowych" title="Link to this heading">#</a></h2>
+<p>Możliwe jest pobranie adresu funkcji wygenerowanej na podstawie szablonu.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"> </span>
+<span class="kt">void</span><span class="w"> </span><span class="n">process</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="n">value</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Processing value: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="n">execute</span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">ptr_fun</span><span class="p">)(</span><span class="kt">int</span><span class="p">))</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span>
+<span class="w">    </span><span class="n">ptr_fun</span><span class="p">(</span><span class="n">value</span><span class="p">);</span>
+<span class="p">}</span>
+
+
+<span class="c1">// Jawne podanie typu - kompilator generuje process&lt;int&gt;</span>
+<span class="n">execute</span><span class="p">(</span><span class="o">&amp;</span><span class="n">process</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">);</span>
+
+<span class="c1">// Można też przypisać do zmiennej</span>
+<span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">ptr_fun</span><span class="p">)(</span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">process</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="n">ptr_fun</span><span class="p">(</span><span class="mi">42</span><span class="p">);</span>
+</pre></div>
+</div>
+<section id="automatyczna-dedukcja-typu">
+<h3>Automatyczna dedukcja typu<a class="headerlink" href="#automatyczna-dedukcja-typu" title="Link to this heading">#</a></h3>
+<p>W niektórych kontekstach kompilator może wydedukować typ automatycznie:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">T</span><span class="w"> </span><span class="n">add</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="c1">// Dedukcja z typu zmiennej wskaźnikowej</span>
+<span class="kt">int</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">ptr_fun</span><span class="p">)(</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">add</span><span class="p">;</span><span class="w">  </span><span class="c1">// dedukuje add&lt;int&gt;</span>
+
+<span class="k">auto</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ptr_fun</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">);</span><span class="w">  </span><span class="c1">// = 7</span>
+
+<span class="c1">// Dedukcja przy przekazywaniu do funkcji</span>
+<span class="k">using</span><span class="w"> </span><span class="n">IntBinaryFunc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">int</span><span class="p">(</span><span class="o">*</span><span class="p">)(</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="p">);</span>
+
+<span class="k">auto</span><span class="w"> </span><span class="n">apply</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[](</span><span class="n">IntBinaryFunc</span><span class="w"> </span><span class="n">op</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">op</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">);</span>
+<span class="p">};</span>
+<span class="w">    </span>
+<span class="n">apply</span><span class="p">(</span><span class="n">add</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">);</span><span class="w">  </span><span class="c1">// dedukuje add&lt;int&gt;</span>
+</pre></div>
+</div>
+</section>
+<section id="wskazniki-do-przeciazonych-szablonow-funckcji">
+<h3>Wskaźniki do przeciążonych szablonów funckcji<a class="headerlink" href="#wskazniki-do-przeciazonych-szablonow-funckcji" title="Link to this heading">#</a></h3>
+<p>Przy przeciążonych szablonach typ wskaźnika determinuje, która wersja jest wybierana:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">void</span><span class="w"> </span><span class="n">foo</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;foo(T)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">void</span><span class="w"> </span><span class="n">foo</span><span class="p">(</span><span class="n">T</span><span class="o">*</span><span class="w"> </span><span class="n">ptr</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;foo(T*)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">p1</span><span class="p">)(</span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">foo</span><span class="p">;</span><span class="w">   </span><span class="c1">// wybiera foo&lt;int&gt;(int)</span>
+<span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">p2</span><span class="p">)(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">foo</span><span class="p">;</span><span class="w">  </span><span class="c1">// wybiera foo&lt;int&gt;(int*)</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span>
+<span class="n">p1</span><span class="p">(</span><span class="n">x</span><span class="p">);</span><span class="w">    </span><span class="c1">// foo(T)</span>
+<span class="n">p2</span><span class="p">(</span><span class="o">&amp;</span><span class="n">x</span><span class="p">);</span><span class="w">   </span><span class="c1">// foo(T*)</span>
+</pre></div>
+</div>
+</section>
 </section>
 <section id="parametry-szablonu-dla-wartosci-zwracanych-przez-funkcje">
 <h2>Parametry szablonu dla wartości zwracanych przez funkcję<a class="headerlink" href="#parametry-szablonu-dla-wartosci-zwracanych-przez-funkcje" title="Link to this heading">#</a></h2>
-<p>W przypadku, gdy funkcja szablonowa ma zwrócić typ inny niż typy argumentów (lub przynajmniej rozważana jest taka możliwość) możemy
-zastosować następujące rozwiązania:</p>
-<section id="parametr-szablonu-okreslajacy-zwracany-typ">
-<h3>Parametr szablonu określający zwracany typ<a class="headerlink" href="#parametr-szablonu-okreslajacy-zwracany-typ" title="Link to this heading">#</a></h3>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">TReturn</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">T1</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">T2</span><span class="o">&gt;</span>
-<span class="n">TReturn</span><span class="w"> </span><span class="n">max</span><span class="w"> </span><span class="p">(</span><span class="n">T1</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">T2</span><span class="w"> </span><span class="n">b</span><span class="p">);</span>
-</pre></div>
-</div>
-<p>Ponieważ nie ma związku pomiędzy typami argumentów a typem zwracanym, wywołując szablon należy określić jawnie typ zwracany.</p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="o">::</span><span class="n">max</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mf">7.2</span><span class="p">);</span>
-</pre></div>
-</div>
-</section>
-<section id="dedukcja-typu-zwracanego-z-funkcji-c-14">
-<h3>Dedukcja typu zwracanego z funkcji (C++14)<a class="headerlink" href="#dedukcja-typu-zwracanego-z-funkcji-c-14" title="Link to this heading">#</a></h3>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T1</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">T2</span><span class="o">&gt;</span>
-<span class="k">auto</span><span class="w"> </span><span class="n">max</span><span class="w"> </span><span class="p">(</span><span class="n">T1</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">T2</span><span class="w"> </span><span class="n">b</span><span class="p">)</span>
+<p>Gdy funkcja szablonowa ma zwrócić typ inny niż typy jej argumentów, mamy kilka możliwości rozwiązania tego problemu.</p>
+<section id="jawny-parametr-typu-zwracanego">
+<h3>1. Jawny parametr typu zwracanego<a class="headerlink" href="#jawny-parametr-typu-zwracanego" title="Link to this heading">#</a></h3>
+<p>Dodajemy parametr szablonu określający zwracany typ:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">TReturn</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">T1</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">T2</span><span class="o">&gt;</span>
+<span class="n">TReturn</span><span class="w"> </span><span class="n">max_value</span><span class="p">(</span><span class="n">T1</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">T2</span><span class="w"> </span><span class="n">b</span><span class="p">)</span>
 <span class="p">{</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
 <span class="p">}</span>
+
+<span class="c1">// Użycie - typ zwracany musi być podany jawnie</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">max_value</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mf">7.2</span><span class="p">);</span><span class="w">      </span><span class="c1">// TReturn=double, T1=int, T2=double</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">max_value</span><span class="o">&lt;</span><span class="kt">long</span><span class="w"> </span><span class="kt">long</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">);</span><span class="w">   </span><span class="c1">// TReturn=long long, T1=int, T2=int</span>
 </pre></div>
 </div>
+<p><strong>Zalety:</strong></p>
+<ul class="simple">
+<li><p>Pełna kontrola nad typem zwracanym</p></li>
+<li><p>Możliwość wybrania dowolnego typu</p></li>
+</ul>
+<p><strong>Wady:</strong></p>
+<ul class="simple">
+<li><p>Wymaga jawnego podania typu przy każdym wywołaniu</p></li>
+<li><p>Mniej wygodne w użyciu</p></li>
+</ul>
 </section>
-<section id="uzycie-klasy-cech-type-traits">
-<h3>Użycie klasy cech (<em>type traits</em>)<a class="headerlink" href="#uzycie-klasy-cech-type-traits" title="Link to this heading">#</a></h3>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;type_traits&gt;</span>
+<section id="automatyczna-dedukcja-typu-zwracanego-c-14">
+<h3>2. Automatyczna dedukcja typu zwracanego (C++14)<a class="headerlink" href="#automatyczna-dedukcja-typu-zwracanego-c-14" title="Link to this heading">#</a></h3>
+<p>Najprostrze rozwiązanie - pozwalamy kompilatorowi wydedukować typ zwracany:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T1</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">T2</span><span class="o">&gt;</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">max</span><span class="p">(</span><span class="n">T1</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">T2</span><span class="w"> </span><span class="n">b</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">b</span><span class="p">;</span><span class="w">    </span><span class="c1">// typ dedukowany z wyrażenia return</span>
+<span class="p">}</span>
+
+<span class="k">auto</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">max</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mf">7.2</span><span class="p">);</span><span class="w">  </span><span class="c1">// zwraca double (dzięki konwersji 4 -&gt; 4.0)</span>
+</pre></div>
+</div>
+<p><strong>Zalety:</strong></p>
+<ul class="simple">
+<li><p>Najprostsze w użyciu</p></li>
+<li><p>Automatyczne określanie typu</p></li>
+<li><p>Działa dobrze dla prostych przypadków</p></li>
+</ul>
+<p><strong>Wady:</strong></p>
+<ul class="simple">
+<li><p>Typ może nie być oczywisty</p></li>
+<li><p>Różne instrukcje return muszą zwracać ten sam typ</p></li>
+<li><p>Może prowadzić do niespodziewanych konwersji</p></li>
+</ul>
+</section>
+<section id="trailing-return-decltype-c-11">
+<h3>3. Trailing return decltype (C++11)<a class="headerlink" href="#trailing-return-decltype-c-11" title="Link to this heading">#</a></h3>
+<p>Jawne określenie typu zwracanego na podstawie wyrażenia:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T1</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">T2</span><span class="o">&gt;</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">max</span><span class="p">(</span><span class="n">T1</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">T2</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">decltype</span><span class="p">(</span><span class="n">b</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">b</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// lub używając decltype(auto) w C++14</span>
 <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T1</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">T2</span><span class="o">&gt;</span>
-<span class="n">std</span><span class="o">::</span><span class="n">common_type_t</span><span class="o">&lt;</span><span class="n">T1</span><span class="p">,</span><span class="w"> </span><span class="n">T2</span><span class="o">&gt;</span><span class="w"> </span><span class="n">max</span><span class="w"> </span><span class="p">(</span><span class="n">T1</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">T2</span><span class="w"> </span><span class="n">b</span><span class="p">)</span>
+<span class="k">decltype</span><span class="p">(</span><span class="k">auto</span><span class="p">)</span><span class="w"> </span><span class="n">max</span><span class="p">(</span><span class="n">T1</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">T2</span><span class="w"> </span><span class="n">b</span><span class="p">)</span>
 <span class="p">{</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><strong>Zalety:</strong></p>
+<ul class="simple">
+<li><p>Precyzyjna kontrola nad typem</p></li>
+<li><p>Zachowuje kwalifikatory (const, &amp;, &amp;&amp;)</p></li>
+</ul>
+<p><strong>Wady:</strong></p>
+<ul class="simple">
+<li><p>Bardziej skomplikowana składnia</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">decltype</span></code> może produkować referencje - należy być ostrożnym gdy zwracamy lokalne zmienne lub tymczasowe obiekty!!!</p></li>
+</ul>
+</section>
+<section id="uzycie-type-traits">
+<h3>4. Użycie type traits<a class="headerlink" href="#uzycie-type-traits" title="Link to this heading">#</a></h3>
+<p>Klasy cech mogą definiować typ zwracany na podstawie typów argumentów.</p>
+<p>Poniższy przykład wykorzystuje cechę <code class="docutils literal notranslate"><span class="pre">std::common_type</span></code> z biblioteki standardowej do określenia typy zwracanego, jako wspólnego typu, do którego można bezpiecznie przekonwertować oba argumenty:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;type_traits&gt;</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T1</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">T2</span><span class="o">&gt;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">common_type_t</span><span class="o">&lt;</span><span class="n">T1</span><span class="p">,</span><span class="w"> </span><span class="n">T2</span><span class="o">&gt;</span><span class="w"> </span><span class="n">max</span><span class="p">(</span><span class="n">T1</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">T2</span><span class="w"> </span><span class="n">b</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">auto</span><span class="w"> </span><span class="n">result1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">max</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mf">7.2</span><span class="p">);</span><span class="w">      </span><span class="c1">// zwraca double</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">result2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">max</span><span class="p">(</span><span class="mf">4L</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">);</span><span class="w">       </span><span class="c1">// zwraca long</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">result3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">max</span><span class="p">(</span><span class="mf">4.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">7.0</span><span class="p">);</span><span class="w">   </span><span class="c1">// zwraca double</span>
+</pre></div>
+</div>
+<p><strong>Zalety:</strong></p>
+<ul class="simple">
+<li><p>Przewidywalne zachowanie</p></li>
+<li><p>Precyzyjna kontrola nad typem zwracanym</p></li>
+</ul>
+<p><strong>Wady:</strong></p>
+<ul class="simple">
+<li><p>Może nie działać dla typów użytkownika (technika wymaga specjalizacji szablonu cechy)</p></li>
+</ul>
 </section>
 </section>
 <section id="domyslne-parametry-szablonu">
 <h2>Domyślne parametry szablonu<a class="headerlink" href="#domyslne-parametry-szablonu" title="Link to this heading">#</a></h2>
-<p>Definiują parametry szablonu, możemy określić dla nich wartości domyślne. Mogą one odwoływać się do wcześniej zdefiniowanych parametrów szablonu.</p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;type_traits&gt;</span>
+<p>Definiując parametry szablonu, możemy określić dla nich wartości domyślne. Mogą one odwoływać się do wcześniej zdefiniowanych parametrów szablonu.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;type_traits&gt;</span>
 
 <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T1</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">T2</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">RT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">common_type_t</span><span class="o">&lt;</span><span class="n">T1</span><span class="p">,</span><span class="n">T2</span><span class="o">&gt;&gt;</span>
 <span class="n">RT</span><span class="w"> </span><span class="n">max</span><span class="w"> </span><span class="p">(</span><span class="n">T1</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">T2</span><span class="w"> </span><span class="n">b</span><span class="p">)</span>
@@ -660,11 +990,11 @@ zastosować następujące rozwiązania:</p>
 </pre></div>
 </div>
 <p>Wywołując szablon funkcji możemy pominąć argumenty z domyślnymi wartościami:</p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">val_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">::</span><span class="n">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mf">3.14</span><span class="p">);</span><span class="w"> </span><span class="c1">// ::max&lt;int, double, double&gt;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">val_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">max_value</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mf">3.14</span><span class="p">);</span><span class="w"> </span><span class="c1">// max_value&lt;int, double, double&gt;</span>
 </pre></div>
 </div>
 <p>lub jawnie podać odpowiedni argument:</p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">val_2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">::</span><span class="n">max</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="kt">short</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">);</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">val_2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">max_value</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="kt">short</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">);</span>
 </pre></div>
 </div>
 </section>
@@ -734,21 +1064,39 @@ zastosować następujące rozwiązania:</p>
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dedukcja-typu-argumentow-szablonu">Dedukcja typu argumentów szablonu</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tworzenie-instancji-szablonu">Tworzenie instancji szablonu</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fazy-kompilacji-szablonu">Fazy kompilacji szablonu</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#skladnia-definicji-szablonu-funkcji">Składnia definicji szablonu funkcji</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#przyklady-szablonow-funkcji">Przykłady szablonów funkcji</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prosty-szablon-funkcji-max-value">Prosty szablon funkcji max_value()</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#uzycie-szablonu-funkcji-max-value">Użycie szablonu funkcji max_value()</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dedukcja-typow-argumentow-szablonu">Dedukcja typów argumentów szablonu</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#podstawowe-reguly-dedukcji">Podstawowe reguły dedukcji</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#przyklady-dedukcji">Przykłady dedukcji</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rozwiazywanie-konfliktow-dedukcji">Rozwiązywanie konfliktów dedukcji</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dedukcja-arumentow">Dedukcja arumentów</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dedukcja-przy-przekazywaniu-przez-wartosc">Dedukcja przy przekazywaniu przez wartość</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dedukcja-przy-przekazywaniu-przez-referencje">Dedukcja przy przekazywaniu przez referencję</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dedukcja-przy-przekazywaniu-przez-referencje-do-r-value">Dedukcja przy przekazywaniu przez referencję do r-value</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#specjalizacja-funkcji-szablonowych">Specjalizacja funkcji szablonowych</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pelna-specjalizacja-full-specialization">Pełna specjalizacja (full specialization)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#przeciazanie">Przeciążanie</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#polaczenie-przeciazania-szablonow-specjalizacji-i-przeciazania-funkcji">Połączenie przeciążania szablonów, specjalizacji i przeciążania funkcji</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reguly-wyboru-przeciazenia">Reguły wyboru przeciążenia</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#przeciazanie-szablonow">Przeciążanie szablonów</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adres-wygenerowanej-funkcji">Adres wygenerowanej funkcji</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#wskazniki-do-funkcji-szablonowych">Wskaźniki do funkcji szablonowych</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#automatyczna-dedukcja-typu">Automatyczna dedukcja typu</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wskazniki-do-przeciazonych-szablonow-funckcji">Wskaźniki do przeciążonych szablonów funckcji</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parametry-szablonu-dla-wartosci-zwracanych-przez-funkcje">Parametry szablonu dla wartości zwracanych przez funkcję</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parametr-szablonu-okreslajacy-zwracany-typ">Parametr szablonu określający zwracany typ</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dedukcja-typu-zwracanego-z-funkcji-c-14">Dedukcja typu zwracanego z funkcji (C++14)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#uzycie-klasy-cech-type-traits">Użycie klasy cech (<em>type traits</em>)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#jawny-parametr-typu-zwracanego">1. Jawny parametr typu zwracanego</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#automatyczna-dedukcja-typu-zwracanego-c-14">2. Automatyczna dedukcja typu zwracanego (C++14)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trailing-return-decltype-c-11">3. Trailing return decltype (C++11)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#uzycie-type-traits">4. Użycie type traits</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#domyslne-parametry-szablonu">Domyślne parametry szablonu</a></li>

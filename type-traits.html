@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Biblioteka klas cech typów - &lt;type_traits&gt; &#8212; Book title</title>
+    <title>Klasy cech typów - biblioteka &lt;type_traits&gt; &#8212; Book title</title>
   
   
   
@@ -35,7 +35,7 @@
     <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=3d148d41" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=78a291d3" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341" />
@@ -62,7 +62,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Funkcje szablonowe z auto" href="generic-functions.html" />
-    <link rel="prev" title="Klasy cech i wytycznych" href="traits-policies.html" />
+    <link rel="prev" title="Nazwy zależne od typów" href="dependent-names.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -184,12 +184,13 @@
 <li class="toctree-l2"><a class="reference internal" href="class-templates.html">Szablony klas</a></li>
 <li class="toctree-l2"><a class="reference internal" href="aliases.html">Aliasy szablonów</a></li>
 <li class="toctree-l2"><a class="reference internal" href="variable-templates.html">Szablony zmiennych</a></li>
+<li class="toctree-l2"><a class="reference internal" href="template-instantiation.html">Proces tworzenia instancji szablonu</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dependent-names.html">Nazwy zależne od typów</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="traits-policies.html">Klasy cech i wytycznych</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Biblioteka klas cech typów - &lt;type_traits&gt;</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Klasy cech typów - biblioteka &lt;type_traits&gt;</a></li>
 <li class="toctree-l1"><a class="reference internal" href="generic-functions.html">Funkcje szablonowe z auto</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sfinae.html">SFINAE - Substitution Failure Is Not An Error - enable_if</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sfinae.html">SFINAE - enable_if</a></li>
 <li class="toctree-l1"><a class="reference internal" href="concepts.html">Koncepty i ograniczenia szablonów</a></li>
 <li class="toctree-l1"><a class="reference internal" href="variadic-templates.html">Variadic templates</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fold-expressions.html">Fold expressions w C++17</a></li>
@@ -296,7 +297,7 @@
       
       
       
-      <li><a href="_sources/type-traits.rst" target="_blank"
+      <li><a href="_sources/type-traits.md" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -306,7 +307,7 @@
 <span class="btn__icon-container">
   <i class="fas fa-file"></i>
   </span>
-<span class="btn__text-container">.rst</span>
+<span class="btn__text-container">.md</span>
 </a>
 </li>
       
@@ -380,7 +381,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Biblioteka klas cech typów - <type_traits></h1>
+    <h1>Klasy cech typów - biblioteka <type_traits></h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -395,14 +396,16 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#meta-funkcje-zwracajace-typy">Meta-funkcje zwracające typy</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stale-calkowite-integral-constants">Stałe całkowite - <em>integral constants</em></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#klasy-cech-typow">Klasy cech typów</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#klasy-cech-transformujace-typy">Klasy cech transformujące typy</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#cechy-transformujace-typy-w-bibliotece-standardowej">Cechy transformujące typy w bibliotece standardowej</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#klasy-cech-typow-predykaty">Klasy cech typów - predykaty</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#klasa-cech-isvoid">Klasa cech IsVoid<t></t></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#klasa-cech-issame-t-u">Klasa cech IsSame&lt;T, U&gt;</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#biblioteka-standardowa-type-traits">Biblioteka standardowa &lt;type_traits&gt;</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cechy-transformujace-typy-w-bibliotece-standardowej">Cechy transformujące typy w bibliotece standardowej</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#cecha-std-decay">Cecha <code class="docutils literal notranslate"><span class="pre">std::decay</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#klasy-cech-predykaty">Klasy cech - predykaty</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#standardowe-cechy-typow-predykaty">Standardowe cechy typów - predykaty</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#cechy-podstawowe">Cechy podstawowe</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#cechy-kompozytowe">Cechy kompozytowe</a></li>
@@ -412,6 +415,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cechy-typow-i-statyczne-asercje">Cechy typów i statyczne asercje</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#przyklady-uzycia-cech-typow">Przykłady użycia cech typów</a></li>
 </ul>
             </nav>
         </div>
@@ -423,11 +427,11 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="biblioteka-klas-cech-typow-type-traits">
-<h1>Biblioteka klas cech typów - &lt;type_traits&gt;<a class="headerlink" href="#biblioteka-klas-cech-typow-type-traits" title="Link to this heading">#</a></h1>
+  <section id="klasy-cech-typow-biblioteka-type-traits">
+<h1>Klasy cech typów - biblioteka &lt;type_traits&gt;<a class="headerlink" href="#klasy-cech-typow-biblioteka-type-traits" title="Link to this heading">#</a></h1>
 <p>Biblioteka standardowa zawiera zestaw szablonów klas umożliwiających
-cechowanie typów na etapie kompilacji. Dzięki cechom typów (<strong>type
-traits</strong>) na etapie kompilacji:</p>
+cechowanie typów na etapie kompilacji.</p>
+<p>Dzięki cechom typów (<strong>type traits</strong>) na etapie kompilacji:</p>
 <ul class="simple">
 <li><p>wybierana jest optymalna (wydajna) implementacja danej funkcjonalności (z wykorzystaniem SFINAE).</p></li>
 <li><p>przeprowadzana jest statyczna asercja umożliwiająca wczesne wychwycenie błędów</p></li>
@@ -437,134 +441,171 @@ traits</strong>) na etapie kompilacji:</p>
 <p>Technika cechowania wykorzystuje meta-funkcje, najczęściej implementowane jako szablony klas przyjmujące jako parametr
 cechowany typ i zwracające:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">type_trait&lt;T&gt;::type</span></code> - nowy typ będący efektem transformacji (np. usunięcia modyfikatora <code class="docutils literal notranslate"><span class="pre">const</span></code>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">type_trait&lt;T&gt;::value</span></code> - stałą statyczną wartość <code class="docutils literal notranslate"><span class="pre">constexpr</span></code> (najczęściej typu <code class="docutils literal notranslate"><span class="pre">bool</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">type_trait&lt;T&gt;::type</span></code> - nowy typ będący efektem transformacji (np. usunięcia modyfikatora <code class="docutils literal notranslate"><span class="pre">const</span></code>)</p></li>
 </ul>
 <section id="meta-funkcje-zwracajace-wartosc">
 <h3>Meta-funkcje zwracające wartość<a class="headerlink" href="#meta-funkcje-zwracajace-wartosc" title="Link to this heading">#</a></h3>
 <p>Przykład implementacji meta-funkcji zwracającej stałą wartość ewaluowaną na etapie kompilacji:</p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
-<span class="k">struct</span><span class="w"> </span><span class="nc">TypeSize</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">Constant</span><span class="o">&gt;</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">IntegralConstant</span>
 <span class="p">{</span>
-<span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">T</span><span class="p">);</span>
+<span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Constant</span><span class="p">;</span>
 <span class="p">};</span>
+
+<span class="k">static_assert</span><span class="p">(</span><span class="n">IntegralConstant</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="o">&gt;::</span><span class="n">value</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">5</span><span class="p">);</span>
+<span class="k">static_assert</span><span class="p">(</span><span class="n">IntegralConstant</span><span class="o">&lt;</span><span class="kt">char</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;a&#39;</span><span class="o">&gt;::</span><span class="n">value</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="sc">&#39;a&#39;</span><span class="p">);</span>
+<span class="k">static_assert</span><span class="p">(</span><span class="n">IntegralConstant</span><span class="o">&lt;</span><span class="kt">bool</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="o">&gt;::</span><span class="n">value</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
 </pre></div>
 </div>
-<p>Wykorzystanie meta-funkcji:</p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">TypeSize</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">value</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<p>Dla takich meta-funkcji często definiujemy szablony zmiennych, które pozwalają uniknąć konieczności deklaracji <code class="docutils literal notranslate"><span class="pre">::value</span></code>:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">Constant</span><span class="o">&gt;</span>
+<span class="kr">inline</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">IntegralConstant_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IntegralConstant</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="n">Constant</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span>
+
+<span class="k">static_assert</span><span class="p">(</span><span class="n">IntegralConstant_v</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="o">&gt;</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">5</span><span class="p">);</span>
+<span class="k">static_assert</span><span class="p">(</span><span class="n">IntegralConstant_v</span><span class="o">&lt;</span><span class="kt">char</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;a&#39;</span><span class="o">&gt;</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="sc">&#39;a&#39;</span><span class="p">);</span>
+<span class="k">static_assert</span><span class="p">(</span><span class="n">IntegralConstant_v</span><span class="o">&lt;</span><span class="kt">bool</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="o">&gt;</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
 </pre></div>
 </div>
 </section>
 <section id="meta-funkcje-zwracajace-typy">
 <h3>Meta-funkcje zwracające typy<a class="headerlink" href="#meta-funkcje-zwracajace-typy" title="Link to this heading">#</a></h3>
-<p>Przy implementacji meta-funkcji często stosujemy specjalizację szablonów:</p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// generic implementation for containers</span>
-<span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">C</span><span class="o">&gt;</span>
-<span class="k">struct</span><span class="w"> </span><span class="nc">ElementT</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="k">using</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">C</span><span class="o">::</span><span class="n">value_type</span>
-<span class="p">;</span>
-
-<span class="c1">//partial specialization for arrays of known bounds</span>
-<span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">N</span><span class="o">&gt;</span>
-<span class="k">struct</span><span class="w"> </span><span class="nc">ElementT</span><span class="o">&lt;</span><span class="n">T</span><span class="p">[</span><span class="n">N</span><span class="p">]</span><span class="o">&gt;</span>
+<p>Najprostsz przykład meta-funkcji zwracającej typ to <code class="docutils literal notranslate"><span class="pre">Identity</span></code>:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">Identity</span>
 <span class="p">{</span>
 <span class="w">    </span><span class="k">using</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">T</span><span class="p">;</span>
 <span class="p">};</span>
 
-<span class="c1">//partial specialization for arrays of unknown bounds</span>
-<span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
-<span class="k">struct</span><span class="w"> </span><span class="nc">ElementT</span><span class="o">&lt;</span><span class="n">T</span><span class="p">[]</span><span class="o">&gt;</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="k">using</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">T</span><span class="p">;</span>
-<span class="p">};</span>
+<span class="k">static_assert</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_same</span><span class="o">&lt;</span><span class="n">Identity</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">type</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">);</span>
+<span class="k">static_assert</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_same</span><span class="o">&lt;</span><span class="n">Identity</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;::</span><span class="n">type</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">);</span>
 </pre></div>
 </div>
-<p>Meta-funkcje mogą być wykorzystane w innych szablonach:</p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">Container</span><span class="o">&gt;</span>
-<span class="kt">void</span><span class="w"> </span><span class="n">process</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Container</span><span class="o">&amp;</span><span class="w"> </span><span class="n">c</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="k">typename</span><span class="w"> </span><span class="nc">ElementT</span><span class="o">&lt;</span><span class="n">Container</span><span class="o">&gt;::</span><span class="n">type</span><span class="w"> </span><span class="n">item</span><span class="p">{};</span>
+<p>Dla takich meta-funkcji często definiujemy aliasy szablonów, które pozwalają uniknąć konieczności deklaracji <code class="docutils literal notranslate"><span class="pre">typename</span></code>
+przed zagnieżdżonym typem <code class="docutils literal notranslate"><span class="pre">type</span></code>:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">Identity_t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">Identity</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">type</span><span class="p">;</span>
 
-<span class="w">    </span><span class="c1">//...</span>
+<span class="k">static_assert</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_same</span><span class="o">&lt;</span><span class="n">Identity_t</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">);</span>
+<span class="k">static_assert</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_same</span><span class="o">&lt;</span><span class="n">Identity_t</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="klasy-cech-typow-predykaty">
+<h2>Klasy cech typów - predykaty<a class="headerlink" href="#klasy-cech-typow-predykaty" title="Link to this heading">#</a></h2>
+<p>Predykaty to meta-funkcje, które zwracają wartość <code class="docutils literal notranslate"><span class="pre">true</span></code> lub <code class="docutils literal notranslate"><span class="pre">false</span></code> w zależności od cechowanego typu.</p>
+<section id="klasa-cech-isvoid">
+<h3>Klasa cech IsVoid<T><a class="headerlink" href="#klasa-cech-isvoid" title="Link to this heading">#</a></h3>
+<p>Najprostszym przykładem predykatu jest <code class="docutils literal notranslate"><span class="pre">IsVoid</span></code>, który sprawdza, czy dany typ to <code class="docutils literal notranslate"><span class="pre">void</span></code>. Implementacja predykatu polega na zdefiniowaniu ogólnego
+szablonu, który definiuje zagnieżdżoną stałą statyczną <code class="docutils literal notranslate"><span class="pre">value</span></code> o wartości <code class="docutils literal notranslate"><span class="pre">false</span></code>, oraz pełnej specjalizacji szablonu dla typu <code class="docutils literal notranslate"><span class="pre">void</span></code>, która definiuje <code class="docutils literal notranslate"><span class="pre">value</span></code> jako <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">IsVoid</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">template</span><span class="w"> </span><span class="o">&lt;&gt;</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">IsVoid</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="kr">inline</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">IsVoid_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IsVoid</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span>
+
+<span class="k">static_assert</span><span class="p">(</span><span class="o">!</span><span class="n">IsVoid_v</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">);</span><span class="w"> </span><span class="c1">// int is not void - predicate is false</span>
+<span class="k">static_assert</span><span class="p">(</span><span class="n">IsVoid_v</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="p">);</span><span class="w"> </span><span class="c1">// void is void - predicate is true</span>
+</pre></div>
+</div>
+</section>
+<section id="klasa-cech-issame-t-u">
+<h3>Klasa cech IsSame&lt;T, U&gt;<a class="headerlink" href="#klasa-cech-issame-t-u" title="Link to this heading">#</a></h3>
+<p>Predykat <code class="docutils literal notranslate"><span class="pre">IsSame</span></code> sprawdza, czy dwa typy są takie same. Implementacja predykatu polega na zdefiniowaniu ogólnego
+szablonu, który definiuje zagnieżdżoną stałą statyczną <code class="docutils literal notranslate"><span class="pre">value</span></code> o wartości <code class="docutils literal notranslate"><span class="pre">false</span></code>, oraz specjalizacji częściowej szablonu dla dwóch takich samych typ
+ów, która definiuje <code class="docutils literal notranslate"><span class="pre">value</span></code> jako <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">U</span><span class="o">&gt;</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">IsSame</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">IsSame</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">U</span><span class="o">&gt;</span>
+<span class="kr">inline</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">IsSame_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IsSame</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="n">U</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span>
+
+<span class="k">static_assert</span><span class="p">(</span><span class="n">IsSame_v</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="o">&gt;</span><span class="p">);</span><span class="w">           </span><span class="c1">// true</span>
+<span class="k">static_assert</span><span class="p">(</span><span class="o">!</span><span class="n">IsSame_v</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="kt">unsigned</span><span class="o">&gt;</span><span class="p">);</span><span class="w">     </span><span class="c1">// false</span>
+<span class="k">static_assert</span><span class="p">(</span><span class="n">IsSame_v</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="p">);</span><span class="w"> </span><span class="c1">// true</span>
+<span class="k">static_assert</span><span class="p">(</span><span class="o">!</span><span class="n">IsSame_v</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*&gt;</span><span class="p">);</span><span class="w"> </span><span class="c1">// false</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Predykatową klasę cech można zaimplementować dziedzicząc po <code class="docutils literal notranslate"><span class="pre">std::true_type</span></code> i <code class="docutils literal notranslate"><span class="pre">std::false_type</span></code>, które są zdefiniowane w bibliotece standardowej w nagłówku <code class="docutils literal notranslate"><span class="pre">&lt;type_traits&gt;</span></code>.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">U</span><span class="o">&gt;</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">IsSame</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">false_type</span>
+<span class="p">{};</span>
+
+<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">IsSame</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">true_type</span>
+<span class="p">{};</span>
+</pre></div>
+</div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+### Klasy cech transformujące typy
+
+Często w trakcie pisania kodu szablonowego zachodzi potrzeba transformacji typu określonego
+parametru szablonu (np. wymagane jest usunięcie lub dodanie referencji, modyfikatora `const` lub `volatile`, itp.).
+
+W takim przypadku możemy posłużyć się klasą cechy transformującej (implementowaną jako meta-funkcja):
+
+```cpp
+template &lt;typename T&gt;
+struct RemoveReference
+{
+    using type = T;
+};
+
+template &lt;typename T&gt;
+struct RemoveReference&lt;T&amp;&gt;
+{
+    using type = T;
+};
+
+template &lt;typename T&gt;
+struct RemoveReference&lt;T&amp;&amp;&gt;
+{
+    using type = T;
+};
+</pre></div>
+</div>
+<p>Od C++14 do klas cech dodane są odpowiednie aliasy szablonów, które umożliwiają uniknięcie konieczności deklaracji <code class="docutils literal notranslate"><span class="pre">typename</span></code>
+przed zagnieżdżonym typem <code class="docutils literal notranslate"><span class="pre">type</span></code>:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">RemoveReference_t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">RemoveReference</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">type</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Klasa cechy <code class="docutils literal notranslate"><span class="pre">RemoveReference</span></code> może być wykorzystana w innych szablonach, np. do implementacji funkcji <code class="docutils literal notranslate"><span class="pre">move</span></code>:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">RemoveReference_t</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&amp;&amp;</span><span class="w"> </span><span class="n">move</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">item</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">RemoveReference_t</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&amp;&amp;&gt;</span><span class="p">(</span><span class="n">item</span><span class="p">);</span>
 <span class="p">}</span>
 </pre></div>
 </div>
 </section>
 </section>
-<section id="stale-calkowite-integral-constants">
-<h2>Stałe całkowite - <em>integral constants</em><a class="headerlink" href="#stale-calkowite-integral-constants" title="Link to this heading">#</a></h2>
-<p>Szablon <code class="docutils literal notranslate"><span class="pre">std::integral_constant</span></code> pozwala opakować w w postaci
-meta-funkcji stałą zdefiniowaną na etapie kompilacji.</p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">v</span><span class="o">&gt;</span>
-<span class="k">struct</span><span class="w"> </span><span class="nc">integral_constant</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v</span><span class="p">;</span>
-<span class="w">    </span><span class="k">typedef</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">value_type</span><span class="p">;</span>
-<span class="w">    </span><span class="k">typedef</span><span class="w"> </span><span class="n">integral_constant</span><span class="w"> </span><span class="n">type</span><span class="p">;</span><span class="w"> </span><span class="c1">// using injected-class-name</span>
-<span class="w">    </span><span class="k">constexpr</span><span class="w"> </span><span class="k">operator</span><span class="w"> </span><span class="n">value_type</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">value</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<span class="w">    </span><span class="k">constexpr</span><span class="w"> </span><span class="n">value_type</span><span class="w"> </span><span class="k">operator</span><span class="p">()()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">value</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="c1">//since c++14</span>
-<span class="p">};</span>
-</pre></div>
-</div>
-<p>Wykorzystanie meta-funkcji <code class="docutils literal notranslate"><span class="pre">integral_constant</span></code> wygląda następująco:</p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">integral_constant</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span>
-</pre></div>
-</div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">const</span> <span class="nb">int</span><span class="p">)</span> <span class="mi">5</span>
-</pre></div>
-</div>
-<p>Biblioteka standardowa definiuje pomocniczy alias dla stałej typu <code class="docutils literal notranslate"><span class="pre">bool</span></code>:</p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="kt">bool</span><span class="w"> </span><span class="n">v</span><span class="o">&gt;</span>
-<span class="k">using</span><span class="w"> </span><span class="n">bool_constant</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">integral_constant</span><span class="o">&lt;</span><span class="kt">bool</span><span class="p">,</span><span class="w"> </span><span class="n">v</span><span class="o">&gt;</span><span class="p">;</span>
-</pre></div>
-</div>
-<p>Zdefiniowane są również dwa typowe przypadki takich stałych:</p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">true_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bool_constant</span><span class="o">&lt;</span><span class="nb">true</span><span class="o">&gt;</span><span class="p">;</span><span class="w"> </span><span class="c1">// integral_constant&lt;bool, true&gt;</span>
-<span class="k">using</span><span class="w"> </span><span class="n">false_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bool_constant</span><span class="o">&lt;</span><span class="nb">false</span><span class="o">&gt;</span><span class="p">;</span><span class="w"> </span><span class="c1">// integral_constant&lt;bool, false&gt;</span>
-</pre></div>
-</div>
-</section>
-<section id="klasy-cech-typow">
-<h2>Klasy cech typów<a class="headerlink" href="#klasy-cech-typow" title="Link to this heading">#</a></h2>
-<section id="klasy-cech-transformujace-typy">
-<h3>Klasy cech transformujące typy<a class="headerlink" href="#klasy-cech-transformujace-typy" title="Link to this heading">#</a></h3>
-<p>Często w trakcie pisania kodu szablonowego zachodzi potrzeba transformacji typu określonego
-parametru szablonu (np. wymagane jest usunięcie lub dodanie referencji, modyfikatora <code class="docutils literal notranslate"><span class="pre">const</span></code> lub <code class="docutils literal notranslate"><span class="pre">volatile</span></code>, itp.).</p>
-<p>W takim przypadku możemy posłużyć się klasą cechy transformującej (implementowaną jako meta-funkcja):</p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
-<span class="k">struct</span><span class="w"> </span><span class="nc">remove_reference</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="k">using</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">T</span><span class="p">;</span>
-<span class="p">};</span>
-
-<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
-<span class="k">struct</span><span class="w"> </span><span class="nc">remove_reference</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&amp;&gt;</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="k">using</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">T</span><span class="p">;</span>
-<span class="p">};</span>
-
-<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
-<span class="k">struct</span><span class="w"> </span><span class="nc">remove_reference</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&amp;&amp;&gt;</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="k">using</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">T</span><span class="p">;</span>
-<span class="p">};</span>
-</pre></div>
-</div>
-<p>Od C++14 do klas cech dodane są odpowiednie aliasy szablonów, które umożliwiają uniknięcie konieczności deklaracji <code class="docutils literal notranslate"><span class="pre">typename</span></code>
-przed zagnieżdżonym typem <code class="docutils literal notranslate"><span class="pre">type</span></code>:</p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
-<span class="k">using</span><span class="w"> </span><span class="n">remove_reference_t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">remove_reference</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">type</span><span class="p">;</span>
-</pre></div>
-</div>
-<p>Użycie cech transformujących wygląda następująco:</p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">closure</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[](</span><span class="k">auto</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">item</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">remove_reference_t</span><span class="o">&lt;</span><span class="k">decltype</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="o">&gt;</span><span class="w"> </span><span class="n">item_cpy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">item</span><span class="p">;</span>
-<span class="p">};</span>
-</pre></div>
-</div>
+<section id="biblioteka-standardowa-type-traits">
+<h2>Biblioteka standardowa &lt;type_traits&gt;<a class="headerlink" href="#biblioteka-standardowa-type-traits" title="Link to this heading">#</a></h2>
 <section id="cechy-transformujace-typy-w-bibliotece-standardowej">
-<h4>Cechy transformujące typy w bibliotece standardowej<a class="headerlink" href="#cechy-transformujace-typy-w-bibliotece-standardowej" title="Link to this heading">#</a></h4>
+<h3>Cechy transformujące typy w bibliotece standardowej<a class="headerlink" href="#cechy-transformujace-typy-w-bibliotece-standardowej" title="Link to this heading">#</a></h3>
 <p>Biblioteka standardowa w nagłówku <code class="docutils literal notranslate"><span class="pre">&lt;type_traits&gt;</span></code> definiuje zbiór klas cech transformujących:</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
@@ -606,7 +647,6 @@ przed zagnieżdżonym typem <code class="docutils literal notranslate"><span cla
 </tbody>
 </table>
 </div>
-</section>
 <section id="cecha-std-decay">
 <h4>Cecha <code class="docutils literal notranslate"><span class="pre">std::decay</span></code><a class="headerlink" href="#cecha-std-decay" title="Link to this heading">#</a></h4>
 <p>Przydatną cechą jest zdefiniowana w bibliotece standardowej cecha <code class="docutils literal notranslate"><span class="pre">std::decay</span></code>.</p>
@@ -617,7 +657,7 @@ przed zagnieżdżonym typem <code class="docutils literal notranslate"><span cla
 <li><p>tablice konwertowane są do wskaźników</p></li>
 <li><p>funkcje konwertowane są do wskaźników do funkcji</p></li>
 </ul>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">U</span><span class="o">&gt;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">U</span><span class="o">&gt;</span>
 <span class="kt">void</span><span class="w"> </span><span class="n">check_decay</span><span class="p">()</span>
 <span class="p">{</span>
 <span class="w">    </span><span class="k">static_assert</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_same_v</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">decay_t</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">U</span><span class="o">&gt;</span><span class="p">);</span>
@@ -632,56 +672,6 @@ przed zagnieżdżonym typem <code class="docutils literal notranslate"><span cla
 </pre></div>
 </div>
 </section>
-</section>
-<section id="klasy-cech-predykaty">
-<h3>Klasy cech - predykaty<a class="headerlink" href="#klasy-cech-predykaty" title="Link to this heading">#</a></h3>
-<p>Implementacja cech typów, które pełnią rolę predykatów, polega zwykle na zdefiniowaniu ogólnego
-szablonu dziedziczącego po <code class="docutils literal notranslate"><span class="pre">false_type</span></code> (dla typów nie posiadających
-określonej cechy). Kolejnym krokiem jest dostarczenie wersji
-specjalizowanej szablonu dla typów z cechą, która dziedziczy po typie
-<code class="docutils literal notranslate"><span class="pre">true_type</span></code>.</p>
-<p>Specjalizacja szablonu może być całkowita:</p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
-<span class="k">struct</span><span class="w"> </span><span class="nc">IsVoid</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">false_type</span>
-<span class="p">{};</span>
-
-<span class="k">template</span><span class="w"> </span><span class="o">&lt;&gt;</span>
-<span class="k">struct</span><span class="w"> </span><span class="nc">IsVoid</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">true_type</span>
-<span class="p">{};</span>
-</pre></div>
-</div>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">IsVoid</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span>
-</pre></div>
-</div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">const</span> <span class="nb">bool</span><span class="p">)</span> <span class="n">false</span>
-</pre></div>
-</div>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">IsVoid</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span>
-</pre></div>
-</div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">const</span> <span class="nb">bool</span><span class="p">)</span> <span class="n">true</span>
-</pre></div>
-</div>
-<p>lub częściowa:</p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
-<span class="k">struct</span><span class="w"> </span><span class="nc">IsPointer</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">false_type</span><span class="p">{};</span>
-
-<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
-<span class="k">struct</span><span class="w"> </span><span class="nc">IsPointer</span><span class="o">&lt;</span><span class="n">T</span><span class="o">*&gt;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">true_type</span><span class="p">{};</span>
-</pre></div>
-</div>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">IsPointer</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span>
-</pre></div>
-</div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">const</span> <span class="nb">bool</span><span class="p">)</span> <span class="n">false</span>
-</pre></div>
-</div>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">IsPointer</span><span class="o">&lt;</span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="o">*&gt;::</span><span class="n">value</span><span class="p">;</span>
-</pre></div>
-</div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">const</span> <span class="nb">bool</span><span class="p">)</span> <span class="n">true</span>
-</pre></div>
-</div>
 </section>
 <section id="standardowe-cechy-typow-predykaty">
 <h3>Standardowe cechy typów - predykaty<a class="headerlink" href="#standardowe-cechy-typow-predykaty" title="Link to this heading">#</a></h3>
@@ -722,8 +712,7 @@ odpowiednie cechy.</p>
 <td><p><code class="docutils literal notranslate"><span class="pre">true</span></code> jeśli <code class="docutils literal notranslate"><span class="pre">T</span></code> jest wskaźnikiem do funkcji  składowej</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">is_pointer&lt;T&gt;</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">true</span></code> jeśli <code class="docutils literal notranslate"><span class="pre">T</span></code> jest typem wskaźnikowym
-(ale nie wskaźnikiem do składowej)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">true</span></code> jeśli <code class="docutils literal notranslate"><span class="pre">T</span></code> jest typem wskaźnikowym (ale nie wskaźnikiem do składowej)</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">is_lvalue_reference&lt;T&gt;</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">true</span></code> jeśli <code class="docutils literal notranslate"><span class="pre">T</span></code> jest referencją do l-value</p></td>
@@ -732,8 +721,7 @@ odpowiednie cechy.</p>
 <td><p><code class="docutils literal notranslate"><span class="pre">true</span></code> jeśli <code class="docutils literal notranslate"><span class="pre">T</span></code> jest referencją do r-value</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">is_union&lt;T&gt;</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">true</span></code> jeśli <code class="docutils literal notranslate"><span class="pre">T</span></code> jest unią
-(bez wsparcia kompilatora zawsze zwraca <code class="docutils literal notranslate"><span class="pre">false</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">true</span></code> jeśli <code class="docutils literal notranslate"><span class="pre">T</span></code> jest unią (bez wsparcia kompilatora zawsze zwraca <code class="docutils literal notranslate"><span class="pre">false</span></code></p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">is_void&lt;T&gt;</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">true</span></code> jeśli <code class="docutils literal notranslate"><span class="pre">T</span></code> jest typu void</p></td>
@@ -756,8 +744,7 @@ odpowiednie cechy.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">is_arithmetic&lt;T&gt;</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">is_integral&lt;T&gt;::value</span> <span class="pre">||</span></code>
-<code class="docutils literal notranslate"><span class="pre">is_floating_point&lt;T&gt;::value</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">is_integral&lt;T&gt;::value</span> <span class="pre">||</span></code> <code class="docutils literal notranslate"><span class="pre">is_floating_point&lt;T&gt;::value</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">is_fundamental&lt;T&gt;</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">is_arithmetic&lt;T&gt;::value</span> <span class="pre">||</span> <span class="pre">is_void&lt;T&gt;::value</span> <span class="pre">||</span> <span class="pre">is_null_pointer&lt;T&gt;::value</span></code></p></td>
@@ -766,18 +753,16 @@ odpowiednie cechy.</p>
 <td><p><code class="docutils literal notranslate"><span class="pre">!is_fundamental&lt;T&gt;::value</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">is_object&lt;T&gt;</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">is_scalar&lt;T&gt;::value</span> <span class="pre">||</span> <span class="pre">is_array&lt;T&gt;::value</span>&#160; <span class="pre">||</span> <span class="pre">is_union&lt;T&gt;::value</span>&#160; <span class="pre">||</span></code>
-<code class="docutils literal notranslate"><span class="pre">is_class&lt;T&gt;::value</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">is_scalar&lt;T&gt;::value</span> <span class="pre">||</span> <span class="pre">is_array&lt;T&gt;::value</span>&#160; <span class="pre">||</span> <span class="pre">is_union&lt;T&gt;::value</span>&#160; <span class="pre">||</span></code> <code class="docutils literal notranslate"><span class="pre">is_class&lt;T&gt;::value</span></code></p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">is_reference&lt;T&gt;</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">is_lvalue_reference&lt;T&gt;</span></code> || <code class="docutils literal notranslate"><span class="pre">is_rvalue_reference&lt;T&gt;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">is_lvalue_reference&lt;T&gt;</span> <span class="pre">||</span> <span class="pre">is_rvalue_reference&lt;T&gt;</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">is_member_pointer&lt;T&gt;</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">is_member_object_pointer&lt;T&gt;</span> <span class="pre">||</span> <span class="pre">is_member_function_pointer&lt;T&gt;</span></code></p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">is_scalar&lt;T&gt;</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">is_arithmetic&lt;T&gt;::value</span> <span class="pre">||</span> <span class="pre">is_enum&lt;T&gt;::value</span> <span class="pre">||</span> <span class="pre">is_null_pointer&lt;T&gt;::value</span></code>
-<code class="docutils literal notranslate"><span class="pre">is_pointer&lt;T&gt;::value</span> <span class="pre">||</span> <span class="pre">is_member_pointer&lt;T&gt;::value</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">is_arithmetic&lt;T&gt;::value</span> <span class="pre">||</span> <span class="pre">is_enum&lt;T&gt;::value</span> <span class="pre">||</span> <span class="pre">is_null_pointer&lt;T&gt;::value</span></code> <code class="docutils literal notranslate"><span class="pre">is_pointer&lt;T&gt;::value</span> <span class="pre">||</span> <span class="pre">is_member_pointer&lt;T&gt;::value</span></code></p></td>
 </tr>
 </tbody>
 </table>
@@ -801,8 +786,7 @@ odpowiednie cechy.</p>
 <td><p><code class="docutils literal notranslate"><span class="pre">true</span></code> jeśli <code class="docutils literal notranslate"><span class="pre">T</span></code> jest typem ulotnym</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">is_polymorphic&lt;T&gt;</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">true</span></code> jeśli <code class="docutils literal notranslate"><span class="pre">T</span></code> posiada przynajmniej jedną
-funkcję wirtualną</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">true</span></code> jeśli <code class="docutils literal notranslate"><span class="pre">T</span></code> posiada przynajmniej jedną funkcję wirtualną</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">is_trivial&lt;T&gt;</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">true</span></code> jeśli <code class="docutils literal notranslate"><span class="pre">T</span></code> jest typem trywialnym</p></td>
@@ -811,8 +795,7 @@ funkcję wirtualną</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">true</span></code> jeśli <code class="docutils literal notranslate"><span class="pre">T</span></code> jest trywialnie kopiowalne</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">is_standard_layout&lt;T&gt;</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">true</span></code> jeśli <code class="docutils literal notranslate"><span class="pre">T</span></code> jest typem o standardowym
-layout’cie</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">true</span></code> jeśli <code class="docutils literal notranslate"><span class="pre">T</span></code> jest typem o standardowym layout’cie</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">is_pod&lt;T&gt;</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">true</span></code> jeśli <code class="docutils literal notranslate"><span class="pre">T</span></code> jest typem POD</p></td>
@@ -821,14 +804,10 @@ layout’cie</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">true</span></code> jeśli <code class="docutils literal notranslate"><span class="pre">T</span></code> jest typem abstrakcyjnym</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">is_unsigned&lt;T&gt;</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">true</span></code> jeśli <code class="docutils literal notranslate"><span class="pre">T</span></code> jest typem całkowitym bez znaku
-lub typem wyliczeniowym zdefiniowanym przy pomocy
-typu <code class="docutils literal notranslate"><span class="pre">unsigned</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">true</span></code> jeśli <code class="docutils literal notranslate"><span class="pre">T</span></code> jest typem całkowitym bez znaku lub typem wyliczeniowym zdefiniowanym przy pomocy typu <code class="docutils literal notranslate"><span class="pre">unsigned</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">is_signed&lt;T&gt;</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">true</span></code> jeśli <code class="docutils literal notranslate"><span class="pre">T</span></code> jest typem całkowitym ze
-znakiem lub typem wyliczeniowym zdefiniowanym przy
-pomocy typu <code class="docutils literal notranslate"><span class="pre">signed</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">true</span></code> jeśli <code class="docutils literal notranslate"><span class="pre">T</span></code> jest typem całkowitym ze znakiem lub typem wyliczeniowym zdefiniowanym przy pomocy typu <code class="docutils literal notranslate"><span class="pre">signed</span></code></p></td>
 </tr>
 </tbody>
 </table>
@@ -842,7 +821,7 @@ statycznych asercji w kodzie. Takie asercje nie pozwalają wygenerować
 błędnego kodu i jednocześnie podnoszą czytelność komunikatów o błędach w
 szablonach.</p>
 <p>Przykład:</p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
 <span class="kt">void</span><span class="w"> </span><span class="n">swap</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="o">&amp;</span><span class="w"> </span><span class="n">b</span><span class="p">)</span>
 <span class="p">{</span>
 <span class="w">    </span><span class="k">static_assert</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_copy_constructible</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">,</span>
@@ -859,6 +838,45 @@ szablonach.</p>
 </pre></div>
 </div>
 </section>
+</section>
+<section id="przyklady-uzycia-cech-typow">
+<h2>Przykłady użycia cech typów<a class="headerlink" href="#przyklady-uzycia-cech-typow" title="Link to this heading">#</a></h2>
+<p>Załóżmy, że chcemy napisać szablon funkcji <code class="docutils literal notranslate"><span class="pre">process</span></code>, który będzie przetwarzał elementy kontenera. Aby to zrobić, musimy znać typ elementów przechowywanych w kontenerze. Możemy to osiągnąć za pomocą klasy cechy <code class="docutils literal notranslate"><span class="pre">ValueType</span></code>, która zwraca typ elementów kontenera.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// generic implementation for containers</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">Container</span><span class="o">&gt;</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">ValueType</span><span class="w"> </span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">using</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">Container</span><span class="o">::</span><span class="n">value_type</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="c1">//partial specialization for arrays of known bounds</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">N</span><span class="o">&gt;</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">ValueType</span><span class="o">&lt;</span><span class="n">T</span><span class="p">[</span><span class="n">N</span><span class="p">]</span><span class="o">&gt;</span><span class="w"> </span>
+<span class="p">{</span><span class="w">          </span>
+<span class="w">    </span><span class="k">using</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">T</span><span class="p">;</span><span class="w">     </span>
+<span class="p">};</span>
+
+<span class="c1">//partial specialization for arrays of unknown bounds</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"> </span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">ValueType</span><span class="o">&lt;</span><span class="n">T</span><span class="p">[]</span><span class="o">&gt;</span><span class="w"> </span>
+<span class="p">{</span><span class="w">          </span>
+<span class="w">    </span><span class="k">using</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">T</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">Container</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">ValueType_t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">ValueType</span><span class="o">&lt;</span><span class="n">Container</span><span class="o">&gt;::</span><span class="n">type</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Meta-funkcje mogą być wykorzystane w innych szablonach:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">Container</span><span class="o">&gt;</span>
+<span class="kt">void</span><span class="w"> </span><span class="n">process</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Container</span><span class="o">&amp;</span><span class="w"> </span><span class="n">c</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">ValueType_t</span><span class="o">&lt;</span><span class="n">Container</span><span class="o">&gt;</span><span class="w"> </span><span class="n">item</span><span class="p">{};</span>
+
+<span class="w">    </span><span class="c1">//...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
 </section>
 </section>
 
@@ -893,12 +911,12 @@ szablonach.</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="traits-policies.html"
+       href="dependent-names.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Klasy cech i wytycznych</p>
+        <p class="prev-next-title">Nazwy zależne od typów</p>
       </div>
     </a>
     <a class="right-next"
@@ -931,14 +949,16 @@ szablonach.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#meta-funkcje-zwracajace-typy">Meta-funkcje zwracające typy</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stale-calkowite-integral-constants">Stałe całkowite - <em>integral constants</em></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#klasy-cech-typow">Klasy cech typów</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#klasy-cech-transformujace-typy">Klasy cech transformujące typy</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#cechy-transformujace-typy-w-bibliotece-standardowej">Cechy transformujące typy w bibliotece standardowej</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#klasy-cech-typow-predykaty">Klasy cech typów - predykaty</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#klasa-cech-isvoid">Klasa cech IsVoid<t></t></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#klasa-cech-issame-t-u">Klasa cech IsSame&lt;T, U&gt;</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#biblioteka-standardowa-type-traits">Biblioteka standardowa &lt;type_traits&gt;</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cechy-transformujace-typy-w-bibliotece-standardowej">Cechy transformujące typy w bibliotece standardowej</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#cecha-std-decay">Cecha <code class="docutils literal notranslate"><span class="pre">std::decay</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#klasy-cech-predykaty">Klasy cech - predykaty</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#standardowe-cechy-typow-predykaty">Standardowe cechy typów - predykaty</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#cechy-podstawowe">Cechy podstawowe</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#cechy-kompozytowe">Cechy kompozytowe</a></li>
@@ -948,6 +968,7 @@ szablonach.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cechy-typow-i-statyczne-asercje">Cechy typów i statyczne asercje</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#przyklady-uzycia-cech-typow">Przykłady użycia cech typów</a></li>
 </ul>
   </nav></div>
 

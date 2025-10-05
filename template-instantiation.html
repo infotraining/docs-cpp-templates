@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Szablony zmiennych &#8212; Book title</title>
+    <title>Proces tworzenia instancji szablonu &#8212; Book title</title>
   
   
   
@@ -58,11 +58,11 @@
     <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'variable-templates';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'template-instantiation';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Proces tworzenia instancji szablonu" href="template-instantiation.html" />
-    <link rel="prev" title="Aliasy szablonów" href="aliases.html" />
+    <link rel="next" title="Nazwy zależne od typów" href="dependent-names.html" />
+    <link rel="prev" title="Szablony zmiennych" href="variable-templates.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -183,8 +183,8 @@
 <li class="toctree-l2"><a class="reference internal" href="function-templates.html">Szablony funkcji</a></li>
 <li class="toctree-l2"><a class="reference internal" href="class-templates.html">Szablony klas</a></li>
 <li class="toctree-l2"><a class="reference internal" href="aliases.html">Aliasy szablonów</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Szablony zmiennych</a></li>
-<li class="toctree-l2"><a class="reference internal" href="template-instantiation.html">Proces tworzenia instancji szablonu</a></li>
+<li class="toctree-l2"><a class="reference internal" href="variable-templates.html">Szablony zmiennych</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Proces tworzenia instancji szablonu</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dependent-names.html">Nazwy zależne od typów</a></li>
 </ul>
 </details></li>
@@ -267,7 +267,7 @@
       
       
       
-      <li><a href="https://github.com/infotraining/docs-template/issues/new?title=Issue%20on%20page%20%2Fvariable-templates.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/infotraining/docs-template/issues/new?title=Issue%20on%20page%20%2Ftemplate-instantiation.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -297,7 +297,7 @@
       
       
       
-      <li><a href="_sources/variable-templates.md" target="_blank"
+      <li><a href="_sources/template-instantiation.md" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -381,7 +381,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Szablony zmiennych</h1>
+    <h1>Proces tworzenia instancji szablonu</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -391,7 +391,13 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#zmienne-szablonowe-a-jednostki-translacji">Zmienne szablonowe a jednostki translacji</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-kompilacji-szablonow">Model kompilacji szablonów</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rodzaje-procesu-tworzenia-instancj-szablonu">Rodzaje procesu tworzenia instancj szablonu</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#niejawne-tworzenie-instancji-szablonu-implicit-instantiation">Niejawne tworzenie instancji szablonu (implicit instantiation)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#jawne-tworzenie-instancji-szablonu-explicit-instantiation">Jawne tworzenie instancji szablonu (explicit instantiation)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fazy-kompilacji-szablonu">Fazy kompilacji szablonu</a></li>
 </ul>
             </nav>
         </div>
@@ -403,60 +409,165 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="szablony-zmiennych">
-<h1>Szablony zmiennych<a class="headerlink" href="#szablony-zmiennych" title="Link to this heading">#</a></h1>
-<p>W C++14 zmienne mogą być parametryzowane przy pomocy typu.
-Takie zmienne nazywamy <strong>zmiennymi szablonowymi</strong> (<em>variable templates</em>). Umożliwia to definiowanie stałych, które są sparametryzowane typem.</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
-<span class="k">constexpr</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">pi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">3.141592653589793238462643383279502884</span><span class="p">;</span>
-</pre></div>
-</div>
-<p>Aby użyć zmiennej szablonowej, należy podać jej typ:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">pi</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39;\n&#39;</span><span class="p">;</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">pi</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39;\n&#39;</span><span class="p">;</span>
-</pre></div>
-</div>
-<p>Inny przykład zmiennej szablonowej:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
-<span class="k">constexpr</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">T</span><span class="p">);</span>
-
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">size</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39;\n&#39;</span><span class="p">;</span><span class="w">       </span><span class="c1">// prints 4</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">size</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39;\n&#39;</span><span class="p">;</span><span class="w">    </span><span class="c1">// prints 8</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">size</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39;\n&#39;</span><span class="p">;</span><span class="w"> </span><span class="c1">// prints 32 (on 64-bit system)</span>
-</pre></div>
-</div>
-<section id="zmienne-szablonowe-a-jednostki-translacji">
-<h2>Zmienne szablonowe a jednostki translacji<a class="headerlink" href="#zmienne-szablonowe-a-jednostki-translacji" title="Link to this heading">#</a></h2>
-<p>Zmienne szablonowe mogą być używane w wielu jednostkach translacji (plikach źródłowych <code class="docutils literal notranslate"><span class="pre">.cpp</span></code>). Aby uniknąć problemów z wielokrotną definicją, deklarację zmiennej szablonowej w w pliku nagłówkowym (<code class="docutils literal notranslate"><span class="pre">.hpp</span></code>) poprzedzamy słowem kluczowym <code class="docutils literal notranslate"><span class="pre">inline</span></code>. Taka deklaracja zapewnia tzw. <em>external linkage</em> i zgodność z zasadą ODR (<em>One Definition Rule</em>).</p>
+  <section id="proces-tworzenia-instancji-szablonu">
+<h1>Proces tworzenia instancji szablonu<a class="headerlink" href="#proces-tworzenia-instancji-szablonu" title="Link to this heading">#</a></h1>
+<p><strong>Tworzenie instancji szablonu</strong> (<em>template instantiation</em>) to proces, w którym kompilator generuje konkretny kod funkcji na podstawie definicji szablonu i dostarczonych (lub wydedukowanych) typów argumentów.</p>
+<section id="model-kompilacji-szablonow">
+<h2>Model kompilacji szablonów<a class="headerlink" href="#model-kompilacji-szablonow" title="Link to this heading">#</a></h2>
+<p>Szablony stosują specyficzny model kompilacji, który różni się od zwykłych funkcji:</p>
 <ul class="simple">
-<li><p>plik - <code class="docutils literal notranslate"><span class="pre">math_constants.hpp</span></code></p></li>
+<li><p>Cały kod szablonu musi być dostępny w miejscu użycia (zazwyczaj w pliku nagłówkowym)</p></li>
+<li><p>Kompilator generuje kod dla każdej unikalnej kombinacji parametrów szablonu</p></li>
 </ul>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
-<span class="kr">inline</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">pi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">3.141592653589793238462643383279502884</span><span class="p">;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// max_value.hpp</span>
+<span class="cp">#ifndef MAX_VALUE_HPP</span>
+<span class="cp">#define MAX_VALUE_HPP</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">T</span><span class="w"> </span><span class="n">max_value</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">b</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cp">#endif </span><span class="c1">// MAX_VALUE_HPP</span>
 </pre></div>
 </div>
-<ul>
-<li><p>plik - “unit1.cpp”</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;math_constants.hpp&quot;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// main.cpp</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;max_value.hpp&quot;</span>
 
 <span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span>
 <span class="p">{</span>
-<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">pi</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39;\n&#39;</span><span class="p">;</span><span class="w"> </span><span class="c1">// OK: prints 3.14159...</span>
+<span class="w">    </span><span class="n">max_value</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span><span class="w">      </span><span class="c1">// instancja szablonu: max_value&lt;int&gt;(int, int)</span>
+<span class="w">    </span><span class="n">max_value</span><span class="p">(</span><span class="mf">1.5</span><span class="p">,</span><span class="w"> </span><span class="mf">2.5</span><span class="p">);</span><span class="w">  </span><span class="c1">// instancja szablonu: max_value&lt;double&gt;(double, double)</span>
 <span class="p">}</span>
 </pre></div>
 </div>
-</li>
-<li><p>plik - “unit2.cpp”</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;math_constants.hpp&quot;</span>
+</section>
+<section id="rodzaje-procesu-tworzenia-instancj-szablonu">
+<h2>Rodzaje procesu tworzenia instancj szablonu<a class="headerlink" href="#rodzaje-procesu-tworzenia-instancj-szablonu" title="Link to this heading">#</a></h2>
+<section id="niejawne-tworzenie-instancji-szablonu-implicit-instantiation">
+<h3>Niejawne tworzenie instancji szablonu (implicit instantiation)<a class="headerlink" href="#niejawne-tworzenie-instancji-szablonu-implicit-instantiation" title="Link to this heading">#</a></h3>
+<p>Kompilator automatycznie generuje kod szablonu w miejscu pierwszego użycia:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// translation_unit.cpp</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;max_value.hpp&quot;</span>
 
-<span class="kt">void</span><span class="w"> </span><span class="nf">print</span><span class="p">()</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">max_value</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span><span class="w">  </span><span class="c1">// niejawnie utworzona instancja dla max_value&lt;int&gt;(int, int)</span>
+<span class="kt">double</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">max_value</span><span class="p">(</span><span class="mf">1.5</span><span class="p">,</span><span class="w"> </span><span class="mf">2.5</span><span class="p">);</span><span class="w">  </span><span class="c1">// niejawnie utworzona instancja dla max_value&lt;double&gt;(double, double)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Niejawne tworzenie instancji może prowadzić do wielokrotnego generowania tego samego kodu w różnych jednostkach translacji, co zwiększa rozmiar plików obiektowych i czas kompilacji.</p>
+</div>
+</section>
+<section id="jawne-tworzenie-instancji-szablonu-explicit-instantiation">
+<h3>Jawne tworzenie instancji szablonu (explicit instantiation)<a class="headerlink" href="#jawne-tworzenie-instancji-szablonu-explicit-instantiation" title="Link to this heading">#</a></h3>
+<p>Programista może wymusić wygenerowanie konkretnych instancji szablonu w jednostce translacji. Daje to kontrolę nad tym, gdzie kod jest generowany i może pomóc w optymalizacji czasu kompilacji oraz rozmiaru plików obiektowych.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// math.hpp</span>
+<span class="cp">#ifndef MATH_HPP</span>
+<span class="cp">#define MATH_HPP</span>
+
+<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">T</span><span class="w"> </span><span class="n">square</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="n">value</span><span class="p">);</span>
+
+<span class="cp">#endif </span><span class="c1">// MATH_HPP</span>
+</pre></div>
+</div>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// math.cpp</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;math.hpp&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;complex&gt;</span>
+
+<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">T</span><span class="w"> </span><span class="n">square</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="n">value</span><span class="p">)</span>
 <span class="p">{</span>
-<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">pi</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39;\n&#39;</span><span class="p">;</span><span class="w"> </span><span class="c1">// OK: prints 3.14159...</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">value</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">template</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">square</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="kt">int</span><span class="p">);</span>
+<span class="k">template</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">square</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="p">(</span><span class="kt">double</span><span class="p">);</span>
+<span class="k">template</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">complex</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">square</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">complex</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">complex</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Proces tworzenia jawnej instancji blokuje możliwość tworzenia niejawnych instancji dla innych typów. Dostępne będą tylko te instancje, które zostały jawnie zadeklarowane.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Dla szablonów klas składnia tworzenia jawnej instancji jest nieco inna:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">MyClass</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">;</span><span class="w">  </span><span class="c1">// jawna instancja szablonu klasy </span>
+</pre></div>
+</div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+## Wymagania wobec typów
+
+Utworzenie instancji szablonu jest możliwe tylko wtedy, gdy dla typu podanego jako argument szablonu zdefiniowane są wszystkie operacje używane przez szablon.
+
+```cpp
+template&lt;typename T&gt;
+T max(T a, T b)
+{
+    return b &lt; a ? a : b;  // wymaga operatora&lt; oraz konstruktora kopiującego
+}
+
+struct Point 
+{
+    int x, y;
+    // brak operatora&lt; - nie można użyć max()
+};
+
+struct Value
+{
+    int data;
+    bool operator&lt;(const Value&amp; other) const 
+    {
+        return data &lt; other.data;
+    }
+};
+
+Point p1{1, 2}, p2{3, 4};
+// max(p1, p2);  // ERROR - no operator&lt; for Point
+
+Value v1{10}, v2{20};
+max(v1, v2);     // OK - operator&lt; jest zdefiniowany
+</pre></div>
+</div>
+</section>
+</section>
+<section id="fazy-kompilacji-szablonu">
+<h2>Fazy kompilacji szablonu<a class="headerlink" href="#fazy-kompilacji-szablonu" title="Link to this heading">#</a></h2>
+<p>Kompilacja szablonów przebiega w <strong>dwóch fazach</strong> (<em>two-phase lookup</em>):</p>
+<ol class="arabic">
+<li><p><strong>Faza 1: Analiza definicji szablonu</strong></p>
+<p>Na etapie definicji szablonu (przed tworzeniem jakiejkolwiek instancji) sprawdzana jest:</p>
+<ul class="simple">
+<li><p>poprawność składniowa</p></li>
+<li><p>użycie nazw <strong>niezależnych od parametrów szablonu</strong> (<em>non-dependent names</em>)</p></li>
+<li><p>statyczne asercje, które nie zależą od parametru szablonu</p></li>
+</ul>
+</li>
+<li><p><strong>Faza 2: Analiza instancji szablonu</strong></p>
+<p>Podczas tworzenia instancji szablonu kod jest ponownie sprawdzany, ze szczególnym uwzględnieniem:</p>
+<ul class="simple">
+<li><p>nazw <strong>zależnych od parametrów szablonu</strong> (<em>dependent names</em>)</p></li>
+<li><p>wymagań dotyczących operacji na typach parametrów</p></li>
+<li><p>statycznych asercji zależnych od parametrów</p></li>
+</ul>
+</li>
+</ol>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">void</span><span class="w"> </span><span class="n">foo</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="n">t</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">undeclared</span><span class="p">();</span><span class="w">   </span><span class="c1">// Błąd fazy 1: jeśli undeclared() jest nieznane</span>
+<span class="w">    </span><span class="n">undeclared</span><span class="p">(</span><span class="n">t</span><span class="p">);</span><span class="w">  </span><span class="c1">// Błąd fazy 2: jeśli undeclared(T) jest nieznane dla danego T</span>
+<span class="w">    </span><span class="n">t</span><span class="p">.</span><span class="n">unknown</span><span class="p">();</span><span class="w">   </span><span class="c1">// Błąd fazy 2: jeśli T nie ma metody unknown()</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="k">static_assert</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;int too small&quot;</span><span class="p">);</span><span class="w">  </span><span class="c1">// Faza 1: zawsze błąd jeśli warunek nie jest spełniony</span>
+<span class="w">    </span><span class="k">static_assert</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">T</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;T too small&quot;</span><span class="p">);</span><span class="w">      </span><span class="c1">// Faza 2: błąd tylko dla T o rozmiarze &lt;= 10</span>
 <span class="p">}</span>
 </pre></div>
 </div>
-</li>
-</ul>
 </section>
 </section>
 
@@ -491,20 +602,20 @@ Takie zmienne nazywamy <strong>zmiennymi szablonowymi</strong> (<em>variable tem
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="aliases.html"
+       href="variable-templates.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Aliasy szablonów</p>
+        <p class="prev-next-title">Szablony zmiennych</p>
       </div>
     </a>
     <a class="right-next"
-       href="template-instantiation.html"
+       href="dependent-names.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Proces tworzenia instancji szablonu</p>
+        <p class="prev-next-title">Nazwy zależne od typów</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -524,7 +635,13 @@ Takie zmienne nazywamy <strong>zmiennymi szablonowymi</strong> (<em>variable tem
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#zmienne-szablonowe-a-jednostki-translacji">Zmienne szablonowe a jednostki translacji</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-kompilacji-szablonow">Model kompilacji szablonów</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rodzaje-procesu-tworzenia-instancj-szablonu">Rodzaje procesu tworzenia instancj szablonu</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#niejawne-tworzenie-instancji-szablonu-implicit-instantiation">Niejawne tworzenie instancji szablonu (implicit instantiation)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#jawne-tworzenie-instancji-szablonu-explicit-instantiation">Jawne tworzenie instancji szablonu (explicit instantiation)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fazy-kompilacji-szablonu">Fazy kompilacji szablonu</a></li>
 </ul>
   </nav></div>
 
